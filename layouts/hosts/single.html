@@ -73,7 +73,7 @@
 
               {{ $lootDir := print "content/" .Dir "/loot/" }}
               {{ if and (fileExists $lootDir)}}
-            <button data-tab-item="loot" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','readme')">Loot</button>
+            <button data-tab-item="loot" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','loot')">Loot</button>
 
               {{end}}
             <button data-tab-item="recon" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','recon')">Recon</button>
