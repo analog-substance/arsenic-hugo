@@ -5,8 +5,8 @@
 
 
 {{ $ip := print (replace (replace .Dir "hosts/" "") "/" "") }}
-<div class="as-container d-flex">
-  <div class="p-2 flex-fill">
+<div class="host-info-container as-container d-flex">
+  <div class="host-info p-2 flex-fill">
     <dl>
       <dt>IP Addresses</dt>
       {{ range .Params.IPAddresses }}
@@ -16,7 +16,7 @@
       {{ end }}
     </dl>
   </div>
-  <div class="p-2 flex-fill">
+  <div class="host-info p-2 flex-fill">
 
     <dl>
       <dt>Root Domains</dt>
@@ -33,7 +33,7 @@
       {{ end }}
     </dl>
   </div>
-  <div class="p-2 flex-fill">
+  <div class="host-info p-2 flex-fill">
     <dl>
       <dt>TCP ports</dt>
       {{ range .Params.TCPPorts }}
@@ -48,6 +48,8 @@
       </dd>
       {{ end }}
     </dl>
+  </div>
+  <div class="host-info p-2 flex-fill">
     Tags:
     <ul>
     {{ range .Params.Flags }}
@@ -59,137 +61,190 @@
     </ul>
   </div>
 </div>
-<div class="as-container">
-  {{$readme := print "content/" .Dir "/README.md" }}
-  {{ if and (fileExists $readme)}}
 
-  {{ (print $readme) | readFile | markdownify }}
-
-  {{ end }}
-</div>
 
 <div class="as-container">
-  {{ $lootDir := print "content/" .Dir "/loot/" }}
-  {{ if and (fileExists $lootDir)}}
-	  <h3>Loot</h3>
-		{{$credentials := print $lootDir "/passwords/credentials.txt" }}
-		{{ if and (fileExists $credentials)}}
-		<div class="expand">
-		    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-		        <i style="font-size:x-small;" class="fas fa-chevron-down"></i>
-		        <span>Valid credentials</span>
-		    </div>
-		    <div class="expand-content" style="">
-		        <pre>{{readFile $credentials }}</pre>
-		    </div>
-		</div>
-  	{{ end }}
 
 
-    {{$keys := print $lootDir "/keys/" }}
-    {{ if and (fileExists $keys)}}
-		<div class="expand">
-				<div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-						<i style="font-size:x-small;" class="fas fa-chevron-down"></i>
-						<span>Keys</span>
-		    </div>
-		    <div class="expand-content" style="">
-          {{ range (readDir $keys) }}
-          {{ .Name }}
-					<pre>{{readFile (print $keys .Name) }}</pre>
-          {{ end }}
-				</div>
-		</div>
-    {{ end }}
-  {{ range $index, $element := (readDir $lootDir) }}
-    {{$lootFile := print $lootDir .Name  }}
-    {{ if and (ne $element.Name "passwords") (ne $element.Name "keys") }}
-    <div class="card">
-      <div class="card-header" id="headingThree{{ $index }}">
-        <h2 class="mb-0">
-          <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree{{ $index }}" aria-expanded="false" aria-controls="collapseThree">
-            {{ $element.Name }}</button>
-        </h2>
-      </div>
-      <div id="collapseThree{{ $index }}" class="collapse" aria-labelledby="headingThree" data-parent="#loot-accordian">
-        <div class="card-body">
-          <pre>{{readFile $lootFile }}</pre>
-        </div>
-      </div>
-    </div>
-    {{ end }}
-  {{ end }}
-{{ end }}
+    <div class="tab-panel">
+        <div class="tab-nav">
+            <button data-tab-item="notes" data-tab-group="default" class="tab-nav-button btn active" onclick="switchTab('default','notes')">Notes</button>
+            <button data-tab-item="readme" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','readme')">README</button>
 
+              {{ $lootDir := print "content/" .Dir "/loot/" }}
+              {{ if and (fileExists $lootDir)}}
+            <button data-tab-item="loot" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','readme')">Loot</button>
 
-  {{$reconDir := print "content/" .Dir "/recon/" }}
-  {{ if and (fileExists $reconDir)}}
-  <h3>Recon</h3>
-    {{ $.Scratch.Set "counter" 0 }}
-    {{ range $index, $element := (readDir $reconDir) }}
-      {{ if (in $element.Name "aquatone") }}
-        {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
-        {{$aquatonePath := print "/" ( replace $reconDir "content/" "" ) "/" $element.Name  "/aquatone_report.html#/pages/single" }}
-        {{ if eq ($.Scratch.Get "counter") 1 }}
-
-				<div class="expand">
-				    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-				        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-				        <span>Aquatone</span>
-				    </div>
-				    <div class="expand-content" style="display: none">
-        {{ end }}
-          <a href="{{ $aquatonePath }}" target="aquatone-frame">{{ $element.Name }}</a>
-      {{ end }}
-    {{ end }}
-    {{ $.Scratch.Set "counter" 0 }}
-    {{ range $index, $element := (readDir $reconDir) }}
-      {{ if (in $element.Name "aquatone") }}
-        {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
-        {{$aquatonePath := print "/" ( replace $reconDir "content/" "" ) "/" $element.Name  "/aquatone_report.html#/pages/single" }}
-        {{ if eq ($.Scratch.Get "counter") 1 }}
-          <iframe name="aquatone-frame" src="{{ $aquatonePath }}" style="height: 500px; width: 100%"></iframe>
-				</div>
-		</div>
-        {{ end }}
-      {{ end }}
-    {{ end }}
-    {{ range $index, $element := (readDir $reconDir) }}
-      {{ if and (not (in $element.Name ".gnmap")) (not (in $element.Name "aquatone")) (not (in $element.Name "ignore_"))  }}
-      {{$reconFile := print $reconDir $element.Name  }}
-
-			<div class="expand">
-			    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-			        <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-			        <span>
-								{{ $element.Name }}
-              {{ if or (in $reconFile ".html") (in $reconFile ".xml") }}
-              <a href="{{ replace $reconFile "content/" "/" }}" class="">
-                <i class="fa fa-lg fa-link" aria-hidden="true"></i>
-              </a>
               {{end}}
+            <button data-tab-item="recon" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','recon')">Recon</button>
 
-				    	</span>
-				    </div>
-				    <div class="expand-content" style="display: none;">
-          {{ if and (in $reconFile ".xml") (in $reconFile "nmap") }}
-          <iframe name="nmap-frame" src="{{ replace $reconFile "content/" "/" }}" style="height: 500px; width: 100%"></iframe>
-          {{ else }}
-          <pre>{{readFile $reconFile }}</pre>
-          {{end}}
-	    </div>
-	</div>
-      {{ end }}
-    {{ end }}
-  {{ end }}
+        </div>
+        <div class="tab-content">
 
 
+            <div data-tab-item="notes" data-tab-group="default" class="tab-item active">
+              {{ $me := .Params.Name  }}
+              <table class='table table-striped table-hover'>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Date</th>
+                    <th>Author</th>
+                    <th>Hosts</th>
+                    <th>Summary</th>
+                  </tr>
+                </thead>
+              {{ range (where .Site.RegularPages.ByTitle "Section" "notes" ) }}
+                {{ if in .Params.hosts $me }}
 
+                {{ partial "note.html" . }}
+                {{ end }}
+
+              {{ end }}
+              </table>
+            </div>
+
+            <div data-tab-item="readme" data-tab-group="default" class="tab-item">
+
+              {{ .Content }}
+
+              {{$readme := print "content/" .Dir "/README.md" }}
+              {{ if and (fileExists $readme)}}
+
+              {{ (print $readme) | readFile | markdownify }}
+
+              {{ end }}
+
+            </div>
+
+
+              {{ $lootDir := print "content/" .Dir "/loot/" }}
+              {{ if and (fileExists $lootDir)}}
+            <div data-tab-item="loot" data-tab-group="default" class="tab-item">
+
+
+                  <h3>Loot</h3>
+                  {{$credentials := print $lootDir "/passwords/credentials.txt" }}
+                  {{ if and (fileExists $credentials)}}
+                  <div class="expand">
+                      <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+                          <i style="font-size:x-small;" class="fas fa-chevron-down"></i>
+                          <span>Valid credentials</span>
+                      </div>
+                      <div class="expand-content" style="">
+                          <pre>{{readFile $credentials }}</pre>
+                      </div>
+                  </div>
+                  {{ end }}
+
+
+                  {{$keys := print $lootDir "/keys/" }}
+                  {{ if and (fileExists $keys)}}
+                  <div class="expand">
+                      <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+                          <i style="font-size:x-small;" class="fas fa-chevron-down"></i>
+                          <span>Keys</span>
+                      </div>
+                      <div class="expand-content" style="">
+                        {{ range (readDir $keys) }}
+                        {{ .Name }}
+                        <pre>{{readFile (print $keys .Name) }}</pre>
+                        {{ end }}
+                      </div>
+                  </div>
+                  {{ end }}
+                {{ range $index, $element := (readDir $lootDir) }}
+                  {{$lootFile := print $lootDir .Name  }}
+                  {{ if and (ne $element.Name "passwords") (ne $element.Name "keys") }}
+                  <div class="card">
+                    <div class="card-header" id="headingThree{{ $index }}">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree{{ $index }}" aria-expanded="false" aria-controls="collapseThree">
+                          {{ $element.Name }}</button>
+                      </h2>
+                    </div>
+                    <div id="collapseThree{{ $index }}" class="collapse" aria-labelledby="headingThree" data-parent="#loot-accordian">
+                      <div class="card-body">
+                        <pre>{{readFile $lootFile }}</pre>
+                      </div>
+                    </div>
+                  </div>
+                  {{ end }}
+                {{ end }}
+
+            </div>
+            {{ end }}
+
+            <div data-tab-item="recon" data-tab-group="default" class="tab-item">
+
+                {{$reconDir := print "content/" .Dir "/recon/" }}
+                {{ if and (fileExists $reconDir)}}
+                <h3>Recon</h3>
+                  {{ $.Scratch.Set "counter" 0 }}
+                  {{ range $index, $element := (readDir $reconDir) }}
+                    {{ if (in $element.Name "aquatone") }}
+                      {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
+                      {{$aquatonePath := print "/" ( replace $reconDir "content/" "" ) "/" $element.Name  "/aquatone_report.html#/pages/single" }}
+                      {{ if eq ($.Scratch.Get "counter") 1 }}
+
+                      <div class="expand">
+                          <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+                              <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+                              <span>Aquatone</span>
+                          </div>
+                          <div class="expand-content" style="display: none">
+                      {{ end }}
+                        <a href="{{ $aquatonePath }}" target="aquatone-frame">{{ $element.Name }}</a>
+                    {{ end }}
+                  {{ end }}
+                  {{ $.Scratch.Set "counter" 0 }}
+                  {{ range $index, $element := (readDir $reconDir) }}
+                    {{ if (in $element.Name "aquatone") }}
+                      {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
+                      {{$aquatonePath := print "/" ( replace $reconDir "content/" "" ) "/" $element.Name  "/aquatone_report.html#/pages/single" }}
+                      {{ if eq ($.Scratch.Get "counter") 1 }}
+                        <iframe name="aquatone-frame" src="{{ $aquatonePath }}" style="height: 500px; width: 100%"></iframe>
+                      </div>
+                  </div>
+                      {{ end }}
+                    {{ end }}
+                  {{ end }}
+                  {{ range $index, $element := (readDir $reconDir) }}
+                    {{ if and (not (in $element.Name ".gnmap")) (not (in $element.Name "aquatone")) (not (in $element.Name "ignore_"))  }}
+                    {{$reconFile := print $reconDir $element.Name  }}
+
+                    <div class="expand">
+                        <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+                            <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+                            <span>
+                              {{ $element.Name }}
+                            {{ if or (in $reconFile ".html") (in $reconFile ".xml") }}
+                            <a href="{{ replace $reconFile "content/" "/" }}" class="">
+                              <i class="fa fa-lg fa-link" aria-hidden="true"></i>
+                            </a>
+                            {{end}}
+
+                            </span>
+                          </div>
+                          <div class="expand-content" style="display: none;">
+                        {{ if and (in $reconFile ".xml") (in $reconFile "nmap") }}
+                        <iframe name="nmap-frame" src="{{ replace $reconFile "content/" "/" }}" style="height: 500px; width: 100%"></iframe>
+                        {{ else }}
+                        <pre>{{readFile $reconFile }}</pre>
+                        {{end}}
+                    </div>
+                </div>
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</div>
 <footer class="footline">
-	{{with .Params.LastModifierDisplayName}}
-	    <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
-	    </div>
-	{{end}}
+  {{with .Params.LastModifierDisplayName}}
+      <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
+  {{end}}
 </footer>
 
 {{ partial "footer.html" . }}

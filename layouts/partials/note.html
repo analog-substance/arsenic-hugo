@@ -1,0 +1,17 @@
+
+<tbody  class="expand">
+  <tr class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('tr').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('tr').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+    <td><i style="font-size:x-small;" class="fas fa-chevron-right"></i></td>
+    <td style="width: 250px">{{ dateFormat "January 2, 2006 at 3:04 PM MST" .Params.Date.UTC }} </td>
+    <td>{{ .Params.Author }}</td>
+    <td>{{ range .Params.hosts}}<a href="/hosts/{{ . }}/00_metadata/">{{ . }}</a> {{ end }}</td>
+    <td>{{ .Summary }}</td>
+  </tr>
+  <tr class="note-container expand-content" style="display: none;">
+    <td colspan="5" >
+      <p class="note-content">
+        {{ .Content }}
+      </p>
+    </td>
+  </tr>
+</tbody>

@@ -245,3 +245,30 @@ p.page-break {
   body[data-url="/sections/"] #body {
     margin-left: 0;
   }
+}
+
+
+.host-info {
+  display: inline-block;
+  width: 24%;
+}
+
+.host-info-container {
+  vertical-align: top
+}
+
+.note-container {
+  box-shadow: inset 0 0 4px #000;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+.pdf-container {
+  width: 100%;
+  height: 72vh;
+}
+
+.pdf-container .pdf {
+  width: inherit;
+  height: inherit;
+}

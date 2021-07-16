@@ -20,9 +20,13 @@
     </section>
   {{end}}
 
-    <div class="highlightable">
+  <div class="highlightable">
     <ul class="topics">
-
+      <li data-nav-id="/notes/" title="notes" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "Notes"}}active{{end}}">
+        <a href="/notes/">
+            Notes
+        </a>
+      </li>
       <li data-nav-id="/pipeline/" title="pipeline" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "Pipelines"}}active{{end}}">
         <a href="/pipeline/">
             Pipeline
@@ -41,6 +45,11 @@
       <li data-nav-id="/udpports/" title="udpports" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "UDPPorts"}}active{{end}}">
         <a href="/udpports/">
             UDP Ports
+        </a>
+      </li>
+      <li data-nav-id="/hostnames/" title="hostnames" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "Hostnames"}}active{{end}}">
+        <a href="/hostnames/">
+            Hostnames
         </a>
       </li>
 

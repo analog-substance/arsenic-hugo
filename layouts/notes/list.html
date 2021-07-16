@@ -4,18 +4,28 @@
 	{{ .Content }}
 {{end}}
 
-{{ if or (eq .Kind "taxonomy") (eq .Kind "term") (eq .Kind "taxonomyTerm") (eq .Kind "section")}}
-<ul>
+{{ if or (eq .Kind "taxonomy") (eq .Kind "term")  (eq .Kind "section") }}
+
+<table class='table table-striped table-hover'>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Date</th>
+      <th>Author</th>
+      <th>Hosts</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
 	{{ range .Pages }}
-		<li><a href="{{.RelPermalink}}">{{or .Params.Name .Title}}</a></li>
+	{{ partial "note.html" . }}
 	{{ end }}
-</ul>
+</table>
 {{end}}
+
 
 <footer class=" footline" >
 	{{with .Params.LastModifierDisplayName}}
 	    <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
-	    </div>
 	{{end}}
 </footer>
 
