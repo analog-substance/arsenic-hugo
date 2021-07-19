@@ -5,7 +5,7 @@
     <td style="width: 250px">{{ dateFormat "January 2, 2006 at 3:04 PM MST" .Params.Date.UTC }} </td>
     <td>{{ .Params.Author }}</td>
     <td>{{ range .Params.hosts}}<a href="/hosts/{{ . }}/00_metadata/">{{ . }}</a> {{ end }}</td>
-    <td>{{ .Summary }}</td>
+    <td><div style="max-height: 80px; overflow: hidden;  width: 350px !important; text-overflow: ellipsis;">{{ .Summary }}</div></td>
   </tr>
   <tr class="note-container expand-content" style="display: none;">
     <td colspan="5" >
