@@ -23,7 +23,7 @@
       <a href="#findings">Findings</a>
       <ul>
   {{ $.Scratch.Set "counter" 0 }}
-  {{ range $index, $element :=  (sort (sort (where (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Params.cvss.score" "!=" nil) ".Title" "asc") ".Params.cvss.score" "desc") }}
+  {{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Dir" "asc") ".Params.cvss.score" "desc" }}
     {{ if .Params.cvss.severity }}
       {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
         <li>

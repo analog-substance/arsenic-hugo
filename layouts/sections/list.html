@@ -7,7 +7,7 @@
 {{ $severityScratch.Set "MEDIUM" 0 }}
 {{ $severityScratch.Set "LOW" 0 }}
 {{ $severityScratch.Set "INFORMATIONAL" 0 }}
-{{ range $index, $element := sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Params.cvss.score" "desc" }}
+{{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Dir" "asc") ".Params.cvss.score" "desc" }}
 {{ if .Params.cvss.severity }}
 {{ $severityScratch.Set (upper .Params.cvss.severity) (add ($severityScratch.Get (upper .Params.cvss.severity)) 1) }}
 {{ end }}
@@ -134,7 +134,7 @@
       </tr>
     </thead>
     {{ $.Scratch.Set "counter" 0 }}
-    {{ range $index, $element := sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Params.cvss.score" "desc" }}
+    {{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Dir" "asc") ".Params.cvss.score" "desc" }}
       {{ if .Params.cvss.severity }}
       {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
         <tr>
@@ -159,7 +159,7 @@
 
 
 {{ $.Scratch.Set "counter" 0 }}
-{{ range $index, $element := sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Params.cvss.score" "desc" }}
+{{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Dir" "asc") ".Params.cvss.score" "desc" }}
   {{ if .Params.cvss.severity }}
     {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
     {{$summary := print "content/" .Dir "/01-summary.md" }}

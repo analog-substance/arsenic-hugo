@@ -16,7 +16,7 @@
       </tr>
     </thead>
     {{ $.Scratch.Set "counter" 0 }}
-    {{ range $index, $element := sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Params.cvss.score" "desc" }}
+    {{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Dir" "asc") ".Params.cvss.score" "desc" }}
       {{ if .Params.cvss.severity }}
       {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
     <tr>
@@ -24,10 +24,10 @@
         <a href="{{.Permalink}}">
               #{{  $.Scratch.Get "counter"  }}</a>
       </td>
-      <td>{{ .Params.cvss.severity }}</td>
+      <td>{{ .Params.cvss.severity }} / {{ .Params.cvss.score }}</td>
       <td>{{ .Params.exploitation.exploitable }}</td>
       <td>{{ .Title | markdownify }}</td>
-      <td>{{ .Description  | markdownify }}</td>
+      <td>{{ .Description | markdownify }}</td>
     </tr>
       {{ end }}
     {{ end }}
