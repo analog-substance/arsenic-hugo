@@ -1,8 +1,8 @@
 ---
-title: "{{ replace .Name "-" " " | title }}"
+title: "{{ replaceRE "__(.+)" "" .Name | title }}"
 date: {{ .Date }}
-author: "{{ replaceRE "(.+)-" "" .Name  }}"
-hosts: [ "a" ]
+author: "{{ replaceRE "(.+)__" "" .Name  }}"
+hosts: [  ]
 ---
 
 Sweet notes
