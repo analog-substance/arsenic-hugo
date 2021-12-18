@@ -1,0 +1,63 @@
+{{ partial "header.html" . }}
+
+{{ if eq .Kind "section" }}
+	{{ .Content }}
+{{end}}
+
+
+{{ if ne .Title  "UserFlags" }}
+  {{ partial "host-table.html" . }}
+{{ end }}
+
+
+
+
+<h3>User Flags</h3>
+<ul class="multi-column hostnames">
+ {{ range .Site.Taxonomies.UserFlags.ByCount }}
+   {{ if not (in .Page.Title "::") }}
+  <li>
+	<a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a>
+{{ .Count }} hosts
+  </li>
+   {{ end }}
+ {{ end }}
+</ul>
+{{ $scratch := newScratch }}
+{{ range .Site.Taxonomies.UserFlags.ByCount }}
+  {{ if in .Page.Title "::" }}
+	{{ $prefix := index (split .Page.Title "::") 0 }}
+	{{ if not ($scratch.Get $prefix ) }}
+	  {{ if not ($scratch.Get "prefixes" ) }}
+		{{ $scratch.Set "prefixes" (slice $prefix) }}
+	  {{ else }}
+		{{ $scratch.Add "prefixes" $prefix }}
+	  {{ end }}
+	  {{ $scratch.Set $prefix (slice .) }}
+	{{ else }}
+	  {{ $scratch.Add $prefix .  }}
+	{{ end }}
+  {{ end }}
+{{ end }}
+{{ if ($scratch.Get "prefixes") }}
+  {{ range sort ($scratch.Get "prefixes") }}
+<h3> {{ . }} User Flags</h3>
+<ul class="multi-column hostnames">
+  {{ range $scratch.Get . }}
+  <li>
+	<a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a>
+{{ .Count }} hosts
+  </li>
+  {{ end }}
+</ul>
+  {{ end }}
+{{ end }}
+
+<footer class=" footline" >
+	{{with .Params.LastModifierDisplayName}}
+	    <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
+	    </div>
+	{{end}}
+</footer>
+
+{{ partial "footer.html" . }}

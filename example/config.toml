@@ -9,43 +9,11 @@ home = [ "HTML", "RSS", "JSON"]
 
 paginate  = 0
 rssLimit  = 0  # Maximum number of items in the RSS feed.
-[menu]
-  [[menu.main]]
-    identifier = "findings"
-    name       = "Findings"
-    url        = "findings/"
-  [[menu.main]]
-    identifier = "hosts"
-    name       = "Hosts"
-    url        = "hosts/"
-  [[menu.main]]
-    identifier = "TCPPorts"
-    name       = "TCPPorts"
-    url        = "tcpports/"
-  [[menu.main]]
-    identifier = "UDPPorts"
-    name       = "UDPPorts"
-    url        = "udpports/"
-  [[menu.main]]
-    identifier = "hostnames"
-    name       = "Hostnames"
-    url        = "hostnames/"
-  [[menu.main]]
-    identifier = "rootdomains"
-    name       = "Root Domains"
-    url        = "rootdomains/"
-  [[menu.main]]
-    identifier = "flags"
-    name       = "Flags"
-    url        = "flags/"
-  [[menu.main]]
-    identifier = "pipeline"
-    name       = "Pipeline"
-    url        = "pipeline/"
 
 [taxonomies]
-    Port = "Ports"
-    Flag = "Flags"
+    Flags = "Flags"
+    # Hosts = "host"
+    UserFlags = "UserFlags"
     Hostname = "Hostnames"
     RootDomains = "RootDomains"
     Reviewer = "Reviewer"
@@ -93,8 +61,8 @@ rssLimit  = 0  # Maximum number of items in the RSS feed.
   file = "attack_narrative"
 
 [[params.reportSections]]
-  label = "Strengths and Weaknesses"
-  file = "strengths_and_weaknesses"
+  label = "Strengths"
+  file = "strengths"
 
 [[params.reportSections]]
   label = "Recommendations"

@@ -254,7 +254,7 @@ p.page-break {
 }
 
 .host-info-container {
-  vertical-align: top
+  display: flex;
 }
 
 .note-container {
@@ -271,4 +271,23 @@ p.page-break {
 .pdf-container .pdf {
   width: inherit;
   height: inherit;
+}
+
+ul.nobullets {
+  margin: 0;
+  padding: 0;
+}
+
+ul.nobullets li {
+  padding: 2px 0;
+  list-style: none;
+}
+
+ul.compact {
+  max-height: 90px;
+  overflow: hidden;
+}
+
+ul.compact:hover {
+  max-height: none;
 }

@@ -2,74 +2,140 @@
 
 {{ .Content }}
 
-
+{{ if .Params }}
 
 {{ $ip := print (replace (replace .Dir "hosts/" "") "/" "") }}
+
 <div class="host-info-container as-container d-flex">
   <div class="host-info p-2 flex-fill">
-    <dl>
-      <dt>IP Addresses</dt>
-      {{ range .Params.IPAddresses }}
-      <dd>
-        <code>{{ . }}</code>
-      </dd>
-      {{ end }}
-    </dl>
+    <strong>Reviewed By: {{ .Params.ReviewedBy }}</strong>
+
+    {{ if  .Params.IPAddresses  }}
+      <div>
+        <strong>IP Addresses ({{ len .Params.IPAddresses }})</strong>
+        <ul class="nobullets compact">
+          {{ range .Params.IPAddresses }}
+          <li>
+            <code>{{ . }}</code>
+          </li>
+          {{ end }}
+        </ul>
+      </div>
+  {{ end }}
+  </div>
+
+  <div class="host-info p-2 flex-fill">
+
+    {{ if len .Params.RootDomains  }}
+    <div>
+      <strong>Root Domains ({{ len .Params.RootDomains }})</strong>
+      <ul class="nobullets compact">
+        {{ range .Params.RootDomains }}
+        <li>
+          <code>{{ . }}</code>
+        </li>
+        {{ end }}
+      </ul>
+    </div>
+    {{ end }}
+
+
   </div>
   <div class="host-info p-2 flex-fill">
 
-    <dl>
-      <dt>Root Domains</dt>
-      {{ range .Params.RootDomains }}
-      <dd>
-        <code>{{ . }}</code>
-      </dd>
-      {{ end }}
-      <dt>Hostnames</dt>
-      {{ range .Params.Hostnames }}
-      <dd>
-        <code>{{ . }}</code>
-      </dd>
-      {{ end }}
-    </dl>
-  </div>
-  <div class="host-info p-2 flex-fill">
-    <dl>
-      <dt>TCP ports</dt>
-      {{ range .Params.TCPPorts }}
-      <dd>
-        <code>{{ . }}</code>
-      </dd>
-      {{ end }}
-      <dt>UDP ports</dt>
-      {{ range .Params.UDPPorts }}
-      <dd>
-        <code>{{ . }}</code>
-      </dd>
-      {{ end }}
-    </dl>
-  </div>
-  <div class="host-info p-2 flex-fill">
-    Tags:
-    <ul>
-    {{ range .Params.Flags }}
-    {{$flag := print . }}
-      <li>
-        <a href="/flags/{{ $flag | urlize }}">{{ $flag }} </a>
-      </li>
+    {{ if .Params.Hostname }}
+    <div>
+      <strong>Hostnames ({{ len .Params.Hostnames }})</strong>
+      <ul class="nobullets compact">
+        {{ range .Params.Hostnames }}
+        <li>
+          <code>{{ . }}</code>
+        </li>
+        {{ end }}
+      </ul>
+    </div>
     {{ end }}
-    </ul>
+
+  </div>
+  <div class="host-info p-2 flex-fill">
+
+    {{ if  .Params.TCPPorts  }}
+    <div>
+      <strong>TCP Ports ({{ len .Params.TCPPorts }})</strong>
+      <ul class="nobullets compact">
+        {{ range .Params.TCPPorts }}
+        <li>
+          <code>{{ . }}</code>
+        </li>
+        {{ end }}
+      </ul>
+    </div>
+    {{ end }}
+    {{ if  .Params.UDPPorts  }}
+    <div>
+      <strong>UDP Ports ({{ len .Params.UDPPorts }})</strong>
+      <ul class="nobullets compact">
+        {{ range .Params.UDPPorts }}
+        <li>
+          <code>{{ . }}</code>
+        </li>
+        {{ end }}
+      </ul>
+    </div>
+    {{ end }}
+  </div>
+</div>
+
+<div class="host-info-container as-container d-flex">
+
+  <div class=" p-2 flex-fill">
+    {{ if  .Params.UserFlags  }}
+    <div>
+      <strong>User Flags ({{ len .Params.UserFlags }})</strong>
+      <div>
+        {{ range .Params.UserFlags }}
+        {{$flag := print . }}
+          <a class="btn btn-default" href="/userflags/{{ $flag | urlize }}">{{ $flag }} </a>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+
+
   </div>
 </div>
 
 
+
+<div class="host-info-container as-container d-flex">
+  <div class=" p-2 flex-fill">
+
+    {{ if  .Params.Flags  }}
+    <div>
+      <strong>Flags ({{ len .Params.Flags }})</strong>
+      <div>
+        {{ range .Params.Flags }}
+        {{$flag := print . }}
+          <a class="btn btn-default" href="/flags/{{ $flag | urlize }}">{{ $flag }} </a>
+        {{ end }}
+      </div>
+    </div>
+
+    {{ end }}
+  </div>
+</div>
+
 <div class="as-container">
-
-
     <div class="tab-panel">
         <div class="tab-nav">
             <button data-tab-item="notes" data-tab-group="default" class="tab-nav-button btn active" onclick="switchTab('default','notes')">Notes</button>
+
+
+            {{$readme := print "content/" .Dir "/README.md" }}
+            {{ if and (fileExists $readme)}}
             <button data-tab-item="readme" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','readme')">README</button>
+            {{ end }}
+
 
               {{ $lootDir := print "content/" .Dir "/loot/" }}
               {{ if and (fileExists $lootDir)}}
@@ -241,6 +307,8 @@
         </div>
     </div>
 </div>
+
+{{ end }}
 <footer class="footline">
   {{with .Params.LastModifierDisplayName}}
       <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}

@@ -25,7 +25,9 @@
       </a>
     </td>
     <td>
-      {{ len .Params.Hostnames }}
+      {{ if and .Params.Hostnames }}
+			{{ (len .Params.Hostnames) }}
+			{{end}}
     </td>
     <td>
       {{ len .Params.IPAddresses }}

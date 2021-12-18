@@ -20,70 +20,79 @@
     </section>
   {{end}}
 
+  {{ $filekey := lower (print .File.UniqueID .File.Path .Name) }}
+
   <div class="highlightable">
     <ul class="topics">
-      <li data-nav-id="/notes/" title="notes" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "Notes"}}active{{end}}">
+      <li data-nav-id="/sections/" title="Report" class="dd-item {{if eq $filekey "sections"}}active{{end}}">
+        <a href="/sections/">
+            Report
+        </a>
+        {{ partial "report-toc.html" . }}
+      </li>
+      <li data-nav-id="https://www.first.org/cvss/calculator/3.0" title="https://www.first.org/cvss/calculator/3.0" class="dd-item">
+        <a href="https://www.first.org/cvss/calculator/3.0/">
+            CVSS Calculator
+        </a>
+      </li>
+      <li data-nav-id="https://cwe.mitre.org/data/index.html" title="https://cwe.mitre.org/data/index.html" class="dd-item">
+        <a href="https://cwe.mitre.org/data/index.html">
+            CWE
+        </a>
+      </li>
+      <li data-nav-id="/notes/" title="notes" class="dd-item {{if eq $filekey "notes"}}active{{end}}">
         <a href="/notes/">
             Notes
         </a>
       </li>
-      <li data-nav-id="/pipeline/" title="pipeline" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "Pipelines"}}active{{end}}">
+      <li data-nav-id="/pipeline/" title="pipeline" class="dd-item {{if eq $filekey "pipelines"}}active{{end}}">
         <a href="/pipeline/">
             Pipeline
         </a>
       </li>
-      <li data-nav-id="/flags/" title="flags" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "Flags"}}active{{end}}">
+      <li data-nav-id="/flags/" title="flags" class="dd-item {{if eq $filekey "flags"}}active{{end}}">
         <a href="/flags/">
             Flags
         </a>
       </li>
-      <li data-nav-id="/tcpports/" title="tcpports" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "TCPPorts"}}active{{end}}">
+      <li data-nav-id="/userflags/" title="userflags" class="dd-item {{if eq $filekey "userflags"}}active{{end}}">
+        <a href="/userflags/">
+          UserFlags
+        </a>
+      </li>
+      <li data-nav-id="/tcpports/" title="tcpports" class="dd-item {{if eq $filekey "tcpports"}}active{{end}}">
         <a href="/tcpports/">
             TCP Ports
         </a>
       </li>
-      <li data-nav-id="/udpports/" title="udpports" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "UDPPorts"}}active{{end}}">
+      <li data-nav-id="/udpports/" title="udpports" class="dd-item {{if eq $filekey "udpports"}}active{{end}}">
         <a href="/udpports/">
             UDP Ports
         </a>
       </li>
-      <li data-nav-id="/hostnames/" title="hostnames" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "Hostnames"}}active{{end}}">
+
+      <li data-nav-id="/rootdomains/" title="rootdomains" class="dd-item {{if eq $filekey "rootdomains"}}active{{end}}">
+        <a href="/rootdomains/">
+            Root Domains
+        </a>
+      </li>
+
+      <li data-nav-id="/hostnames/" title="hostnames" class="dd-item {{if eq $filekey "hostnames"}}active{{end}}">
         <a href="/hostnames/">
             Hostnames
         </a>
       </li>
 
-
-
-
-        {{if eq .Site.Params.ordersectionsby "title"}}
-          {{range .Site.Home.Sections.ByTitle}}
-          {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
-          {{end}}
-        {{else}}
-          {{range .Site.Home.Sections.ByWeight}}
-          {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
-          {{end}}
+      {{if eq .Site.Params.ordersectionsby "title"}}
+        {{range .Site.Home.Sections.ByTitle}}
+        {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
         {{end}}
+      {{else}}
+        {{range .Site.Home.Sections.ByWeight}}
+        {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
+        {{end}}
+      {{end}}
 
-        <li data-nav-id="/sections/" title="Report" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) "Sections"}}active{{end}}">
-          <a href="/sections/">
-              Report
-          </a>
-          {{ partial "report-toc.html" . }}
-
-          </li>
-
-        <li data-nav-id="https://www.first.org/cvss/calculator/3.0" title="https://www.first.org/cvss/calculator/3.0" class="dd-item">
-          <a href="https://www.first.org/cvss/calculator/3.0/">
-              CVSS Calculator
-          </a>
-        </li>
-        <li data-nav-id="https://cwe.mitre.org/data/index.html" title="https://cwe.mitre.org/data/index.html" class="dd-item">
-          <a href="https://cwe.mitre.org/data/index.html">
-              CWE
-          </a>
-        </li>
     </ul>
 
     {{ $disableShortcutsTitle := .Site.Params.DisableShortcutsTitle}}

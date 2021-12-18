@@ -1,0 +1,44 @@
+{{ partial "header.html" . }}
+
+{{ if eq .Kind "section" }}
+	{{ .Content }}
+{{end}}
+
+
+
+{{ if ne .Title  "RootDomains" }}
+{{ partial "host-table.html" . }}
+
+<h3>Domains in {{ .Title }}</h3>
+{{ $.Scratch.Set "title" .Title }}
+<ul class="multi-column hostnames">
+{{ range .Site.Taxonomies.hostnames.ByCount }}
+  {{ if in .Page.Title ($.Scratch.Get "title") }}
+  <li>
+	<a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a>
+	{{ .Count }} hosts
+  </li>
+  {{ end }}
+{{ end }}
+</ul>
+{{ end }}
+<h3>All Root Domains</h3>
+<ul class="multi-column hostnames">
+{{ range .Site.Taxonomies.RootDomains.ByCount }}
+<li>
+  <a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a>
+{{ .Count }} hosts
+</li>
+{{ end }}
+
+</ul>
+</div>
+
+<footer class=" footline" >
+	{{with .Params.LastModifierDisplayName}}
+	    <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
+	    </div>
+	{{end}}
+</footer>
+
+{{ partial "footer.html" . }}
