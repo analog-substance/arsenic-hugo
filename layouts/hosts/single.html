@@ -26,7 +26,7 @@
 
   <div class="host-info p-2 flex-fill">
 
-    {{ if len .Params.RootDomains  }}
+    {{ if .Params.RootDomains  }}
     <div>
       <strong>Root Domains ({{ len .Params.RootDomains }})</strong>
       <ul class="nobullets compact">
