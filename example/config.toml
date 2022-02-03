@@ -5,7 +5,8 @@ theme = "arsenic"
 ignoreFiles = [ 
   'findings/.*/0[1-5]-[a-zA-Z_]+\.md',
   'sections/(attack_narrative|executive_summary|foreword|recommendations|scope|strengths_and_weaknesses)\.md',
-  'recon/.*',
+  'recon/domains/.*',
+  'hosts/.*/recon/.*',
 ]
 
 [outputs]
