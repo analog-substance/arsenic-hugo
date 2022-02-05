@@ -291,3 +291,14 @@ ul.compact {
 ul.compact:hover {
   max-height: none;
 }
+
+.btn-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.btn-toolbar .input-group {
+  width: auto;
+}

@@ -1,0 +1,37 @@
+{{ partial "header.html" . }}
+
+{{ if eq .Kind "section" }}
+    {{ .Content }}
+{{end}}
+
+<div class="as-container">
+  <table class='table table-striped table-hover'>
+    <thead>
+      <tr>
+        <th>Severity</th>
+        <th>Type</th>
+        <th>Reviewed</th>
+        <th>Title</th>
+      </tr>
+    </thead>
+    {{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.leadSections) ".Dir" "asc") ".Params.cvss.score" "desc" }}
+    <tr>
+      <td>{{ .Params.cvss.severity }} / {{ .Params.cvss.score }}</td>
+      <td>{{ .Params.details.type | markdownify }}</td>
+      <td>{{ .Params.details.reviewed }}</td>
+      <td>
+        <a href="{{.Permalink}}">{{ .Params.title | markdownify }}</a>
+      </td>
+    </tr>
+    {{ end }}
+  </table>
+</div>
+
+<footer class=" footline" >
+{{with .Params.LastModifierDisplayName}}
+    <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
+    </div>
+{{end}}
+</footer>
+
+{{ partial "footer.html" . }}

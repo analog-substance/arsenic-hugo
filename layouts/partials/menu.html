@@ -83,6 +83,24 @@
         </a>
       </li>
 
+	  <li data-nav-id="/leads-unreviewed/" title="leads-unreviewed" class="dd-item {{if in $filekey "leads-unreviewed"}}active{{end}}">
+		<a href="/leads-unreviewed/">
+			Leads - Unreviewed
+		</a>
+	  </li>
+
+	  <li data-nav-id="/leads-ignored/" title="leads-ignored" class="dd-item {{if in $filekey "leads-ignored"}}active{{end}}">
+		<a href="/leads-ignored/">
+			Leads - Ignored
+		</a>
+	  </li>
+
+	  <li data-nav-id="/leads-copied/" title="leads-copied" class="dd-item {{if in $filekey "leads-copied"}}active{{end}}">
+		<a href="/leads-copied/">
+			Leads - Copied
+		</a>
+	  </li>
+
       {{if eq .Site.Params.ordersectionsby "title"}}
         {{range .Site.Home.Sections.ByTitle}}
         {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
