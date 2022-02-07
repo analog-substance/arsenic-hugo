@@ -6,17 +6,21 @@
 
 <div class="btn-toolbar" role="toolbar">
   <div class="btn-group" role="group">
-	{{ if in .Site.Data.leads.copied .Params.details.id }}
-		<button type="button" class="btn btn-default" onclick="doAction('uncopy', '{{ .Params.details.id }}')">Finding</button>
-	{{ else }}
-		<button type="button" class="btn btn-default" onclick="doAction('copy', '{{ .Params.details.id }}')">Lead</button>
-	{{ end }}
-	{{ if in .Site.Data.leads.ignored .Params.details.id }}
-		<button type="button" class="btn btn-default" onclick="doAction('unignore', '{{ .Params.details.id }}')">Ignored</button>
-	{{ else }}
-		<button type="button" class="btn btn-default" onclick="doAction('ignore', '{{ .Params.details.id }}')">Not Ignored</button>
-	{{ end }}
+    {{ if in .Site.Data.leads.copied .Params.details.id }}
+        <button type="button" class="btn btn-default" onclick="doAction('uncopy', '{{ .Params.details.id }}')">Finding</button>
+    {{ else }}
+        <button type="button" class="btn btn-default" onclick="doAction('copy', '{{ .Params.details.id }}')">Lead</button>
+    {{ end }}
+    {{ if in .Site.Data.leads.ignored .Params.details.id }}
+        <button type="button" class="btn btn-default" onclick="doAction('unignore', '{{ .Params.details.id }}')">Ignored</button>
+    {{ else }}
+        <button type="button" class="btn btn-default" onclick="doAction('ignore', '{{ .Params.details.id }}')">Not Ignored</button>
+    {{ end }}
   </div>
+</div>
+<div>
+  <div id="errstatus"></div>
+  <div id="errmsg"></div>
 </div>
 
 
@@ -35,42 +39,44 @@ Affected Hosts:
 - {{.}}
 {{ end }}
 </pre>
-		{{$summary := print "content/" .Dir "/01-summary.md" }}
-		{{$affected_assets := print "content/" .Dir "/02-affected_assets.md" }}
-		{{$recommendations := print "content/" .Dir "/03-recommendations.md" }}
-		{{$references := print "content/" .Dir "/04-references.md" }}
-		{{readFile $summary | markdownify}}
+        {{$summary := print "content/" .Dir "/01-summary.md" }}
+        {{$affected_assets := print "content/" .Dir "/02-affected_assets.md" }}
+        {{$recommendations := print "content/" .Dir "/03-recommendations.md" }}
+        {{$references := print "content/" .Dir "/04-references.md" }}
+        {{readFile $summary | markdownify}}
 <h3>Recommendations</h3>
-		{{readFile $recommendations | markdownify}}
+        {{readFile $recommendations | markdownify}}
 <h3>References</h3>
-		{{readFile $references | markdownify}}
-		{{$steps_to_reproduce := print "content/" .Dir "/05-steps_to_reproduce.md" }}
-		<h4>CVSS and CWEs</h4>
-		<ul>
-			<li>
-				<a href="https://www.first.org/cvss/calculator/3.0#" data-vector="{{ .Params.cvss.vector }}">https://www.first.org/cvss/calculator/3.0#{{ .Params.cvss.vector }}</a>
-			</li>
-	{{ range $cweI, $cwe := .Params.cweRefs }}
-			<li>
-				<a href="https://cwe.mitre.org/data/definitions/{{ replace $cwe "CWE-" "" }}.html">https://cwe.mitre.org/data/definitions/{{ replace $cwe "CWE-" "" }}.html</a>
-			</li>
-	{{ end }}
-		</ul>
-		{{ if (fileExists $steps_to_reproduce) -}}
+        {{readFile $references | markdownify}}
+        {{$steps_to_reproduce := print "content/" .Dir "/05-steps_to_reproduce.md" }}
+        <h4>CVSS and CWEs</h4>
+        <ul>
+            <li>
+                <a href="https://www.first.org/cvss/calculator/3.0#" data-vector="{{ .Params.cvss.vector }}">https://www.first.org/cvss/calculator/3.0#{{ .Params.cvss.vector }}</a>
+            </li>
+    {{ range $cweI, $cwe := .Params.cweRefs }}
+            <li>
+                <a href="https://cwe.mitre.org/data/definitions/{{ replace $cwe "CWE-" "" }}.html">https://cwe.mitre.org/data/definitions/{{ replace $cwe "CWE-" "" }}.html</a>
+            </li>
+    {{ end }}
+        </ul>
+        {{ if (fileExists $steps_to_reproduce) -}}
 <h3>Steps to reproduce</h3>
-		{{readFile $steps_to_reproduce | markdownify}}
-		{{- end}}
+        {{readFile $steps_to_reproduce | markdownify}}
+        {{- end}}
 
 
-		<h3>Affected Assets</h3>
-		<div class="affected_assets">
-			{{readFile $affected_assets | markdownify}}
-		</div>
+        <h3>Affected Assets</h3>
+        <div class="affected_assets">
+            {{readFile $affected_assets | markdownify}}
+        </div>
 <!-- /.as-container -->
 <hr></div>
 
 <script>
   function doAction(action, lead) {
+    document.getElementById("errstatus").textContent = "";
+    document.getElementById("errmsg").textContent = "";
     var http = new XMLHttpRequest();
     var url = 'http://localhost:7433/api/lead/' + action;
     http.open('POST', url, true);
@@ -79,8 +85,17 @@ Affected Hosts:
     http.setRequestHeader('Content-type', 'application/json');
 
     http.onreadystatechange = function() {
-        if(http.readyState == 4 && http.status == 200) {
-            console.log(http.responseText);
+        if(http.readyState === XMLHttpRequest.DONE) {
+            if(http.status == 200) {
+                console.log(http.responseText);
+            } else {
+                console.log("here1");
+                console.log(http.responseText);
+                console.log("here2");
+                var j = JSON.parse(http.responseText);
+                document.getElementById("errstatus").textContent = j.Status;
+                document.getElementById("errmsg").textContent = j.Msg;
+            }
         }
     }
     http.send(JSON.stringify({
@@ -90,10 +105,10 @@ Affected Hosts:
 </script>
 
 <footer class="footline">
-	{{with .Params.LastModifierDisplayName}}
-	    <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
-	    </div>
-	{{end}}
+    {{with .Params.LastModifierDisplayName}}
+        <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
+        </div>
+    {{end}}
 </footer>
 
 {{ partial "footer.html" . }}
