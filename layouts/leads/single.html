@@ -89,14 +89,17 @@ Affected Hosts:
             if(http.status == 200) {
                 console.log(http.responseText);
             } else {
-                console.log("here1");
                 console.log(http.responseText);
-                console.log("here2");
                 var j = JSON.parse(http.responseText);
                 document.getElementById("errstatus").textContent = j.Status;
                 document.getElementById("errmsg").textContent = j.Msg;
             }
         }
+    }
+
+    http.onerror = function() {
+        document.getElementById("errstatus").textContent = "ERROR";
+        document.getElementById("errmsg").textContent = "Unable to contact server";
     }
     http.send(JSON.stringify({
       id: lead
