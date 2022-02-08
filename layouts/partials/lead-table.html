@@ -1,0 +1,37 @@
+
+  <strong>Total:</strong> {{ len . }}
+  <table class='table table-striped table-hover lead-table'>
+    <thead>
+      <tr>
+        <th>-</th>
+        <th>Severity</th>
+        <th>Type</th>
+        <th>Reviewed</th>
+        <th>Title</th>
+      </tr>
+    </thead>
+    {{ range $index, $element := . }}
+    <tr>
+      <td>
+        <div class="btn-group" role="group">
+          {{ if in .Site.Data.leads.copied .Params.details.id }}
+          <button type="button" class="btn btn-default" data-lead-action="uncopy" data-lead-id="{{ .Params.details.id }}" title="Remove Finding"><i class="fas fa-undo"></i></button>
+          {{ else }}
+              <button type="button" class="btn btn-default fas fa-file-import" data-lead-action="copy" data-lead-id="{{ .Params.details.id }}" title="Copy to findings"><i class="fas fa-file-import"></i></button>
+          {{ end }}
+          {{ if in .Site.Data.leads.ignored .Params.details.id }}
+              <button type="button" class="btn btn-default" data-lead-action="unignore" data-lead-id="{{ .Params.details.id }}" title="Move to Unreviewed"><i class="fas fa-plus"></i></button>
+          {{ else }}
+              <button type="button" class="btn btn-default" data-lead-action="ignore" data-lead-id="{{ .Params.details.id }}" title="Mark as Ignored"><i class="fas fa-ban"></i>
+          {{ end }}
+        </div>
+      </td>
+      <td>{{ .Params.cvss.severity }} / {{ .Params.cvss.score }}</td>
+      <td>{{ .Params.details.type | markdownify }}</td>
+      <td>{{ .Params.details.reviewed }}</td>
+      <td>
+        <a href="{{.Permalink}}">{{ .Params.title | markdownify }}</a>
+      </td>
+    </tr>
+    {{ end }}
+  </table>

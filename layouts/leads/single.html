@@ -2,19 +2,17 @@
 
 {{ .Content }}
 
-
-
 <div class="btn-toolbar" role="toolbar">
   <div class="btn-group" role="group">
     {{ if in .Site.Data.leads.copied .Params.details.id }}
-        <button type="button" class="btn btn-default" onclick="doAction('uncopy', '{{ .Params.details.id }}')">Finding</button>
+        <button type="button" class="btn btn-default" data-lead-action="uncopy" data-lead-id="{{ .Params.details.id }}">Remove Finding</button>
     {{ else }}
-        <button type="button" class="btn btn-default" onclick="doAction('copy', '{{ .Params.details.id }}')">Lead</button>
+        <button type="button" class="btn btn-default" data-lead-action="copy" data-lead-id="{{ .Params.details.id }}">Copy to Finding</button>
     {{ end }}
     {{ if in .Site.Data.leads.ignored .Params.details.id }}
-        <button type="button" class="btn btn-default" onclick="doAction('unignore', '{{ .Params.details.id }}')">Ignored</button>
+        <button type="button" class="btn btn-default" data-lead-action="unignore" data-lead-id="{{ .Params.details.id }}">Move to Unreviewed</button>
     {{ else }}
-        <button type="button" class="btn btn-default" onclick="doAction('ignore', '{{ .Params.details.id }}')">Not Ignored</button>
+        <button type="button" class="btn btn-default" data-lead-action="ignore" data-lead-id="{{ .Params.details.id }}">Mark as Ignored</button>
     {{ end }}
   </div>
 </div>
@@ -22,7 +20,6 @@
   <div id="errstatus"></div>
   <div id="errmsg"></div>
 </div>
-
 
 <div class="as-container">
 <h2 class="section-heading">{{ .Title | markdownify }}</h2>
@@ -74,43 +71,11 @@ Affected Hosts:
 <hr></div>
 
 <script>
-  function doAction(action, lead) {
-    document.getElementById("errstatus").textContent = "";
-    document.getElementById("errmsg").textContent = "";
-    var http = new XMLHttpRequest();
-    var url = 'http://localhost:7433/api/lead/' + action;
-    http.open('POST', url, true);
-
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/json');
-
-    http.onreadystatechange = function() {
-        if(http.readyState === XMLHttpRequest.DONE) {
-            if(http.status == 200) {
-                console.log(http.responseText);
-            } else {
-                console.log(http.responseText);
-                var j = JSON.parse(http.responseText);
-                document.getElementById("errstatus").textContent = j.Status;
-                document.getElementById("errmsg").textContent = j.Msg;
-            }
-        }
-    }
-
-    http.onerror = function() {
-        document.getElementById("errstatus").textContent = "ERROR";
-        document.getElementById("errmsg").textContent = "Unable to contact server";
-    }
-    http.send(JSON.stringify({
-      id: lead
-    }));
-  }
 </script>
 
 <footer class="footline">
     {{with .Params.LastModifierDisplayName}}
         <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
-        </div>
     {{end}}
 </footer>
 

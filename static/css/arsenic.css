@@ -302,3 +302,7 @@ ul.compact:hover {
 .btn-toolbar .input-group {
   width: auto;
 }
+
+.lead-table .btn-group {
+  width: 100px;
+}
