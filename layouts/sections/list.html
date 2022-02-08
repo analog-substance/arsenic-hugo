@@ -67,7 +67,7 @@
   {{ end }}
 {{ end }}
 
-{{ if len (where .Site.Pages "Section" "social") }}
+{{ if len (where (where .Site.Pages "Section" "social") "IsNode" false) }}
 <div class="container">
   <a class="anchor" id="social"></a>
   <a href="#top" class="pull-right report-nav-link">top</a>
@@ -81,11 +81,11 @@
   <th>Clicks</th>
   </tr>
   </thead>
-    {{ range where .Site.Pages "Section" "social"   }}
+    {{ range where (where .Site.Pages "Section" "social") "IsNode" false }}
   <tr>
   <td>
   <a href="{{.Permalink}}">
-  <span class="post-title">{{ .Name }}</span>
+  <span class="post-title">{{ .Params.Name }}</span>
   </a>
   </td>
   <td>
@@ -93,7 +93,7 @@
   <td>
   {{ .Params.EmailsSent }}</td>
   <td>
-  {{ .Params.EmailsViewed }}</td>
+  {{ .Params.EmailsOpened }}</td>
   </tr>
   {{ end }}
   </table>
