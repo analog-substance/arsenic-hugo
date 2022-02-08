@@ -1,0 +1,63 @@
+{{ partial "header.html" . }}
+
+{{ if eq .Kind "section" }}
+  {{ .Content }}
+{{end}}
+
+{{ $allLeads := (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.leadSections) }}
+{{ $usedIDs := slice }}
+
+<div>
+  <div id="errstatus"></div>
+  <div id="errmsg"></div>
+</div>
+
+<div class="tab-panel">
+    <div class="tab-nav">
+
+        <button
+          data-tab-item="leads-unreviewed"
+          data-tab-group="default"
+          class="tab-nav-button btn active"
+          onclick="switchTab('default','leads-unreviewed')"
+         >Unreviewed</button>
+
+        {{ range $status, $leads := $.Site.Data.leads }}
+          {{ $usedIDs = $usedIDs | append $leads }}
+          <button
+            data-tab-item="leads-{{$status}}"
+            data-tab-group="default"
+            class="tab-nav-button btn "
+            onclick="switchTab('default','leads-{{$status}}')"
+            >{{$status}}</button>
+        {{ end }}
+
+    </div>
+    <div class="tab-content">
+
+        <div data-tab-item="leads-unreviewed" data-tab-group="default" class="tab-item active">
+          {{ if gt (len $usedIDs)  0 }}
+          {{ $leadsWithoutStatus := (where $allLeads ".Params.details.id" "not in" $usedIDs) }}
+          {{ partial "lead-table.html" $leadsWithoutStatus }}
+          {{ else }}
+          {{ partial "lead-table.html" $allLeads }}
+          {{end}}
+        </div>
+
+        {{ range $status, $leads := $.Site.Data.leads }}
+          <div data-tab-item="leads-{{ $status }}" data-tab-group="default" class="tab-item ">
+            {{ $leadsInStatus := (where $allLeads ".Params.details.id" "in" $leads) }}
+            {{ partial "lead-table.html" $leadsInStatus }}
+          </div>
+        {{ end }}
+    </div>
+</div>
+
+
+<footer class=" footline" >
+{{with .Params.LastModifierDisplayName}}
+    <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
+{{end}}
+</footer>
+
+{{ partial "footer.html" . }}

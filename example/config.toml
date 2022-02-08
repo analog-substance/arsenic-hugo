@@ -2,8 +2,9 @@ baseurl = "http://localhost:1313/"
 title = "Pentest Report"
 languageCode = "en-us"
 theme = "arsenic"
-ignoreFiles = [ 
+ignoreFiles = [
   'findings/.*/0[1-5]-[a-zA-Z_]+\.md',
+  'leads/.*/0[1-5]-[a-zA-Z_]+\.md',
   'sections/(attack_narrative|executive_summary|foreword|recommendations|scope|strengths_and_weaknesses)\.md',
   'recon/domains/.*',
   'hosts/.*/recon/.*',
@@ -33,6 +34,7 @@ rssLimit  = 0  # Maximum number of items in the RSS feed.
 
     # optionally specify where the content is
     findingSections = ["findings"]
+    leadSections = ["leads"]
     hostSections = ["hosts"]
 
     # theme's color scheme

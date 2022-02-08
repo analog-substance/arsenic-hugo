@@ -83,6 +83,12 @@
         </a>
       </li>
 
+      <li data-nav-id="/leads/" title="leads" class="dd-item {{if in $filekey "leads"}}active{{end}}">
+        <a href="/leads/">
+          Leads
+        </a>
+      </li>
+
       {{if eq .Site.Params.ordersectionsby "title"}}
         {{range .Site.Home.Sections.ByTitle}}
         {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}

@@ -1,15 +1,16 @@
 {{- $needComma := false -}}
 [{{- range $index, $page := .Site.Pages.ByTitle -}}
 {{- if strings.HasSuffix .Path "metadata.md" -}}
+{{- if or (strings.HasPrefix .Path "findings") (strings.HasPrefix .Path "leads") (strings.HasPrefix .Path "hosts") -}}
 {{- if  $needComma -}},{{- end -}}
 {{ $needComma = true }}
-{{- if strings.HasPrefix .Path "findings" -}}
+{{- if or (strings.HasPrefix .Path "findings") (strings.HasPrefix .Path "leads") -}}
 {{$summary := print "content/" .Dir "/01-summary.md" }}
 {
 	"uri": "{{ $page.Permalink }}",
 	"title": "{{ htmlEscape $page.Title}}",
 	"tags": [{{ range $tindex, $tag := $page.Params.Flags }}{{ if $tindex }}, {{ end }}"{{ $tag| htmlEscape }}"{{ end }}],
-	"description": "{{ htmlEscape .Params.description}}",
+	"description": {{ htmlEscape .Params.description | jsonify}},
 	"content": {{readFile $summary | jsonify}}
 }
 {{- else if strings.HasPrefix .Path "hosts" -}}
@@ -21,6 +22,7 @@
 	"description": "{{ htmlEscape .Params.description}}",
 	"content": {{readFile $summary | jsonify}}
 }
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{ end }}]
