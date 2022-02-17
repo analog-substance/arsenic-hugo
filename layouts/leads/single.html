@@ -36,16 +36,16 @@ Affected Hosts:
 - {{.}}
 {{ end }}
 </pre>
-        {{$summary := print "content/" .Dir "/01-summary.md" }}
-        {{$affected_assets := print "content/" .Dir "/02-affected_assets.md" }}
-        {{$recommendations := print "content/" .Dir "/03-recommendations.md" }}
-        {{$references := print "content/" .Dir "/04-references.md" }}
+        {{$summary := print "content/" .File.Dir "/01-summary.md" }}
+        {{$affected_assets := print "content/" .File.Dir "/02-affected_assets.md" }}
+        {{$recommendations := print "content/" .File.Dir "/03-recommendations.md" }}
+        {{$references := print "content/" .File.Dir "/04-references.md" }}
         {{readFile $summary | markdownify}}
 <h3>Recommendations</h3>
         {{readFile $recommendations | markdownify}}
 <h3>References</h3>
         {{readFile $references | markdownify}}
-        {{$steps_to_reproduce := print "content/" .Dir "/05-steps_to_reproduce.md" }}
+        {{$steps_to_reproduce := print "content/" .File.Dir "/05-steps_to_reproduce.md" }}
         <h4>CVSS and CWEs</h4>
         <ul>
             <li>
