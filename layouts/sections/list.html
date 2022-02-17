@@ -7,7 +7,7 @@
 {{ $severityScratch.Set "MEDIUM" 0 }}
 {{ $severityScratch.Set "LOW" 0 }}
 {{ $severityScratch.Set "INFORMATIONAL" 0 }}
-{{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Dir" "asc") ".Params.cvss.score" "desc" }}
+{{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".File.Dir" "asc") ".Params.cvss.score" "desc" }}
 {{ if .Params.cvss.severity }}
 {{ $severityScratch.Set (upper .Params.cvss.severity) (add ($severityScratch.Get (upper .Params.cvss.severity)) 1) }}
 {{ end }}
@@ -134,7 +134,7 @@
       </tr>
     </thead>
     {{ $.Scratch.Set "counter" 0 }}
-    {{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Dir" "asc") ".Params.cvss.score" "desc" }}
+    {{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".File.Dir" "asc") ".Params.cvss.score" "desc" }}
       {{ if .Params.cvss.severity }}
       {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
         <tr>
@@ -159,13 +159,13 @@
 
 
 {{ $.Scratch.Set "counter" 0 }}
-{{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Dir" "asc") ".Params.cvss.score" "desc" }}
+{{ range $index, $element := sort (sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".File.Dir" "asc") ".Params.cvss.score" "desc" }}
   {{ if .Params.cvss.severity }}
     {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
-    {{$summary := print "content/" .Dir "/01-summary.md" }}
-    {{$affected_assets := print "content/" .Dir "/02-affected_assets.md" }}
-    {{$recommendations := print "content/" .Dir "/03-recommendations.md" }}
-    {{$references := print "content/" .Dir "/04-references.md" }}
+    {{$summary := print "content/" .File.Dir "/01-summary.md" }}
+    {{$affected_assets := print "content/" .File.Dir "/02-affected_assets.md" }}
+    {{$recommendations := print "content/" .File.Dir "/03-recommendations.md" }}
+    {{$references := print "content/" .File.Dir "/04-references.md" }}
 
     <div class="container">
       {{ if eq ($.Scratch.Get "counter") 1 }}
@@ -251,7 +251,7 @@
         </ul>
       </div>
 
-      {{$steps_to_reproduce := print "content/" .Dir  "/05-steps_to_reproduce.md" }}
+      {{$steps_to_reproduce := print "content/" .File.Dir  "/05-steps_to_reproduce.md" }}
       {{ if (fileExists $steps_to_reproduce) -}}
       <div class="subsection">
         <h3>Steps to reproduce</h3>

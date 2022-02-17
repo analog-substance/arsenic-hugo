@@ -4,7 +4,7 @@
 
 {{ if .Params }}
 
-{{ $ip := print (replace (replace .Dir "hosts/" "") "/" "") }}
+{{ $ip := print (replace (replace .File.Dir "hosts/" "") "/" "") }}
 
 <div class="host-info-container as-container d-flex">
   <div class="host-info p-2 flex-fill">
@@ -131,13 +131,13 @@
             <button data-tab-item="notes" data-tab-group="default" class="tab-nav-button btn active" onclick="switchTab('default','notes')">Notes</button>
 
 
-            {{$readme := print "content/" .Dir "/README.md" }}
+            {{$readme := print "content/" .File.Dir "/README.md" }}
             {{ if and (fileExists $readme)}}
             <button data-tab-item="readme" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','readme')">README</button>
             {{ end }}
 
 
-              {{ $lootDir := print "content/" .Dir "/loot/" }}
+              {{ $lootDir := print "content/" .File.Dir "/loot/" }}
               {{ if and (fileExists $lootDir)}}
             <button data-tab-item="loot" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','loot')">Loot</button>
 
@@ -174,7 +174,7 @@
 
               {{ .Content }}
 
-              {{$readme := print "content/" .Dir "/README.md" }}
+              {{$readme := print "content/" .File.Dir "/README.md" }}
               {{ if and (fileExists $readme)}}
 
               {{ (print $readme) | readFile | markdownify }}
@@ -184,7 +184,7 @@
             </div>
 
 
-              {{ $lootDir := print "content/" .Dir "/loot/" }}
+              {{ $lootDir := print "content/" .File.Dir "/loot/" }}
               {{ if and (fileExists $lootDir)}}
             <div data-tab-item="loot" data-tab-group="default" class="tab-item">
 
@@ -243,7 +243,7 @@
 
             <div data-tab-item="recon" data-tab-group="default" class="tab-item">
 
-                {{$reconDir := print "content/" .Dir "/recon/" }}
+                {{$reconDir := print "content/" .File.Dir "/recon/" }}
                 {{ if and (fileExists $reconDir)}}
                 <h3>Recon</h3>
                   {{ $.Scratch.Set "counter" 0 }}
