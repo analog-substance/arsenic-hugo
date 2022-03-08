@@ -146,6 +146,8 @@
               {{end}}
             <button data-tab-item="recon" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','recon')">Recon</button>
 
+            <button data-tab-item="content" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','content')">Content</button>
+
         </div>
         <div class="tab-content">
 
@@ -305,6 +307,10 @@
                     {{ end }}
                   {{ end }}
                 {{ end }}
+            </div>
+
+            <div id="content-tab" data-host="{{ .Params.Name }}" data-tab-item="content" data-tab-group="default" class="tab-item">
+              <h3>Content</h3>
             </div>
         </div>
     </div>
