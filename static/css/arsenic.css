@@ -1,7 +1,7 @@
-
 .pull-right {
   float: right;
 }
+
 a.pull-right {
   padding: 0 0px;
   margin: 1px 2px;
@@ -108,7 +108,7 @@ a.pull-right {
   vertical-align: middle !important;
 }
 
-.rotate-label > div {
+.rotate-label>div {
   transform: rotate(-90deg);
   white-space: nowrap;
   vertical-align: middle;
@@ -125,12 +125,12 @@ a.pull-right {
   background: #fff;
 }
 
-.sticky-header h2{
+.sticky-header h2 {
   margin-bottom: 1px;
   margin-top: 0px
 }
 
-.affected_assets ul > li {
+.affected_assets ul>li {
   display: inline-block;
   width: 350px;
 }
@@ -141,7 +141,8 @@ p.page-break {
   padding: 0 !important;
 }
 
-.print-header, .print-footer {
+.print-header,
+.print-footer {
   display: none;
 }
 
@@ -150,7 +151,7 @@ p.page-break {
 }
 
 @media print {
-/*
+  /*
   .print-header, .print-footer {
     display: block;
     position: fixed;
@@ -179,6 +180,7 @@ p.page-break {
     /* background-color: black;
     -webkit-print-color-adjust: exact; */
   }
+
   /* #cover-page {
     position:absolute;
     left:0;
@@ -206,7 +208,14 @@ p.page-break {
     page-break-before: avoid;
   }
 
-  hr, .copy-to-clipboard, #body-inner > h1, #navigation, #sidebar, #sidebar-toggle-span, #top-bar-sticky-wrapper, .report-nav-link {
+  hr,
+  .copy-to-clipboard,
+  #body-inner>h1,
+  #navigation,
+  #sidebar,
+  #sidebar-toggle-span,
+  #top-bar-sticky-wrapper,
+  .report-nav-link {
     display: none !important;
   }
 
@@ -219,24 +228,26 @@ p.page-break {
     padding: 0 !important;
   }
 
-  .affected_assets ul > li {
+  .affected_assets ul>li {
     display: inline-block;
     width: 30%;
   }
+
   .as-container {
     width: auto !important;
   }
 
-  #body, #body .padding {
+  #body,
+  #body .padding {
 
-      margin: 0 !important;
-      padding: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 }
 
 
 
-@media only all and (min-width: 47em) and (max-width: 75em)  {
+@media only all and (min-width: 47em) and (max-width: 75em) {
 
   body[data-url="/sections/"] #sidebar {
     display: none;
@@ -305,4 +316,13 @@ ul.compact:hover {
 
 .lead-table .btn-group {
   width: 100px;
+}
+
+table.borderless,
+table.borderless td {
+  border: none;
+}
+
+.rotate-160 {
+  --fa-rotate-angle: 160deg;
 }
