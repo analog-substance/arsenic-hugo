@@ -98,16 +98,13 @@ const Util = (function () {
         let tr = table.find("tr")
         if (columns) {
           for (let col of columns) {
-            let th
-            if (col.toHeader) {
-              th = col.toHeader()
-            } else {
-              th = document.createElement("th")
-              th.innerText = col
-            }
+            let th = document.createElement("th")
+            th.innerText = col
 
             tr.append(th)
           }
+        } else {
+          table.find("thead").remove()
         }
 
         for (let row of rows) {
@@ -120,8 +117,8 @@ const Util = (function () {
         let tr = $("<tr></tr>")
         for (let item of data) {
           let td
-          if (item.toCell) {
-            td = item.toCell()
+          if (item instanceof(TableCell)) {
+            td = item.toHTML()
           } else {
             td = document.createElement("td")
             td.innerText = item
@@ -137,47 +134,57 @@ const Util = (function () {
 
 
 
-class TextCell {
-  constructor(text) {
-    this.text = text
-  }
-  toCell() {
-    let td = document.createElement("td")
-    td.innerText = this.text
-    return td
+class TableCell {
+  toHTML() {
+    return $("<td></td>")
   }
 }
 
-class RedirectCell {
+class TextCell extends TableCell {
+  constructor(text) {
+    super()
+    this.text = text
+  }
+  toHTML() {
+    let td = super.toHTML()
+    td.text(this.text)
+    td.html(td.html().replace(/\n/g,'<br/>'))
+    return td[0]
+  }
+}
+
+class RedirectCell extends TableCell {
   constructor(url, redirect) {
+    super()
     this.url = url
     this.redirect = redirect
   }
-  toCell() {
+  toHTML() {
     let icon = new IconCell(["fa-solid", "fa-arrow-rotate-right", "fa-rotate-by", "rotate-160"])
     let row = [new TextCell(`${this.url}\n${this.redirect}`), icon]
     let table = Util.Table.newTable(null, [row])
     table.removeClass()
     table.addClass("borderless")
 
-    let td = $("<td></td>")
+    let td = super.toHTML()
     td.append(table)
     return td[0]
   }
 }
 
-class IconCell {
+class IconCell extends TableCell {
   constructor(classes) {
+    super()
     this.classes = classes
   }
-  toCell() {
+  toHTML() {
     let i = $("<i></i>")
 
     for (let c of this.classes) {
       i.addClass(c)
     }
 
-    let td = $("<td></td>")
+    let td = super.toHTML()
     td.append(i)
     return td[0]
   }
