@@ -8,21 +8,22 @@
         <th>Type</th>
         <th>Reviewed</th>
         <th>Title</th>
+        <th>Affected Assets</th>
       </tr>
     </thead>
     {{ range $index, $element := . }}
     <tr>
       <td>
         <div class="btn-group" role="group">
-          {{ if in .Site.Data.leads.copied .Params.details.id }}
-          <button type="button" class="btn btn-default" data-lead-action="uncopy" data-lead-id="{{ .Params.details.id }}" title="Remove Finding"><i class="fas fa-undo"></i></button>
+          {{ if in .Site.Data.leads.copied .Params.external_uuid }}
+          <button type="button" class="btn btn-default" data-lead-action="uncopy" data-lead-id="{{ .Params.external_uuid }}" title="Remove Finding"><i class="fas fa-undo"></i></button>
           {{ else }}
-              <button type="button" class="btn btn-default fas fa-file-import" data-lead-action="copy" data-lead-id="{{ .Params.details.id }}" title="Copy to findings"><i class="fas fa-file-import"></i></button>
+              <button type="button" class="btn btn-default fas fa-file-import" data-lead-action="copy" data-lead-id="{{ .Params.external_uuid }}" title="Copy to findings"><i class="fas fa-file-import"></i></button>
           {{ end }}
-          {{ if in .Site.Data.leads.ignored .Params.details.id }}
-              <button type="button" class="btn btn-default" data-lead-action="unignore" data-lead-id="{{ .Params.details.id }}" title="Move to Unreviewed"><i class="fas fa-plus"></i></button>
+          {{ if in .Site.Data.leads.ignored .Params.external_uuid }}
+              <button type="button" class="btn btn-default" data-lead-action="unignore" data-lead-id="{{ .Params.external_uuid }}" title="Move to Unreviewed"><i class="fas fa-plus"></i></button>
           {{ else }}
-              <button type="button" class="btn btn-default" data-lead-action="ignore" data-lead-id="{{ .Params.details.id }}" title="Mark as Ignored"><i class="fas fa-ban"></i>
+              <button type="button" class="btn btn-default" data-lead-action="ignore" data-lead-id="{{ .Params.external_uuid }}" title="Mark as Ignored"><i class="fas fa-ban"></i>
           {{ end }}
         </div>
       </td>
@@ -31,6 +32,12 @@
       <td>{{ .Params.details.reviewed }}</td>
       <td>
         <a href="{{.Permalink}}">{{ .Params.title | markdownify }}</a>
+      </td>
+      <td>
+        
+        {{$affected_assets := print "content/" .File.Dir "/02-affected_assets.md" }}
+        {{readFile $affected_assets | markdownify}}
+        
       </td>
     </tr>
     {{ end }}

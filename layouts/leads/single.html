@@ -4,15 +4,15 @@
 
 <div class="btn-toolbar" role="toolbar">
   <div class="btn-group" role="group">
-    {{ if in .Site.Data.leads.copied .Params.details.id }}
-        <button type="button" class="btn btn-default" data-lead-action="uncopy" data-lead-id="{{ .Params.details.id }}">Remove Finding</button>
+    {{ if in .Site.Data.leads.copied .Params.external_uuid }}
+        <button type="button" class="btn btn-default" data-lead-action="uncopy" data-lead-id="{{ .Params.external_uuid }}">Remove Finding</button>
     {{ else }}
-        <button type="button" class="btn btn-default" data-lead-action="copy" data-lead-id="{{ .Params.details.id }}">Copy to Finding</button>
+        <button type="button" class="btn btn-default" data-lead-action="copy" data-lead-id="{{ .Params.external_uuid }}">Copy to Finding</button>
     {{ end }}
-    {{ if in .Site.Data.leads.ignored .Params.details.id }}
-        <button type="button" class="btn btn-default" data-lead-action="unignore" data-lead-id="{{ .Params.details.id }}">Move to Unreviewed</button>
+    {{ if in .Site.Data.leads.ignored .Params.external_uuid }}
+        <button type="button" class="btn btn-default" data-lead-action="unignore" data-lead-id="{{ .Params.external_uuid }}">Move to Unreviewed</button>
     {{ else }}
-        <button type="button" class="btn btn-default" data-lead-action="ignore" data-lead-id="{{ .Params.details.id }}">Mark as Ignored</button>
+        <button type="button" class="btn btn-default" data-lead-action="ignore" data-lead-id="{{ .Params.external_uuid }}">Mark as Ignored</button>
     {{ end }}
   </div>
 </div>

@@ -37,7 +37,7 @@
 
         <div data-tab-item="leads-unreviewed" data-tab-group="default" class="tab-item active">
           {{ if gt (len $usedIDs)  0 }}
-          {{ $leadsWithoutStatus := (where $allLeads ".Params.details.id" "not in" $usedIDs) }}
+          {{ $leadsWithoutStatus := (where $allLeads ".Params.external_uuid" "not in" $usedIDs) }}
           {{ partial "lead-table.html" $leadsWithoutStatus }}
           {{ else }}
           {{ partial "lead-table.html" $allLeads }}
@@ -46,7 +46,7 @@
 
         {{ range $status, $leads := $.Site.Data.leads }}
           <div data-tab-item="leads-{{ $status }}" data-tab-group="default" class="tab-item ">
-            {{ $leadsInStatus := (where $allLeads ".Params.details.id" "in" $leads) }}
+            {{ $leadsInStatus := (where $allLeads ".Params.external_uuid" "in" $leads) }}
             {{ partial "lead-table.html" $leadsInStatus }}
           </div>
         {{ end }}
