@@ -37,46 +37,36 @@ const customStyles = {
 	},
 };
 
-class UrlCell extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.data = props.data
-
-		let isRedirect = this.data.Redirect && this.data.Redirect != ""
-		this.columns = [
-			{
-				cell: row => (
-					<div>
-						<div>{row.Url}</div>
-						{isRedirect &&
-							<div>
-								{row.Redirect}
-							</div>
-						}
-						
-					</div>
-				)
-			},
-			{
-				cell: () => <i className="fa-solid fa-arrow-rotate-right fa-rotate-by rotate-160"></i>,
-				omit: !isRedirect,
-				right: true
-			},
-		];
-	}
-
-	render() {
-		return (
-			<DataTable 
-				columns={this.columns}
-				data={[this.data]}
-				noHeader
-				noTableHead
-			/>
-		)
-	}
-}
+const UrlCell = ({ row }) => {
+	let isRedirect = row.Redirect && row.Redirect != ""
+	let columns = [
+		{
+			cell: row => (
+				<div>
+					<div>{row.Url}</div>
+					{isRedirect &&
+						<div>
+							{row.Redirect}
+						</div>
+					}
+				</div>
+			)
+		},
+		{
+			cell: () => <i className="fa-solid fa-arrow-rotate-right fa-rotate-by rotate-160"></i>,
+			omit: !isRedirect,
+			right: true
+		},
+	];
+	return (
+		<DataTable 
+			columns={columns}
+			data={[row]}
+			noHeader
+			noTableHead
+		/>
+	)
+};
 
 class ContentTable extends React.Component {
 	constructor(props) {
@@ -87,7 +77,7 @@ class ContentTable extends React.Component {
 				name: 'URL',
 				selector: row => row.Url,
 				sortable: true,
-				cell: row => <UrlCell data={row}/>
+				cell: row => <UrlCell row={row}/>
 			},
 			{
 				name: 'Content Type',
