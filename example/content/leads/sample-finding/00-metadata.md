@@ -13,7 +13,7 @@
     "likelihood": "LOW",
     "impact": "HIGH",
     "riskRating": "MEDIUM"
-  }
+  },
 
   "details": {
     "id": "pizza-uuid-lolz"

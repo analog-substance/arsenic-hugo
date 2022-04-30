@@ -147,7 +147,6 @@
             <button data-tab-item="recon" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','recon')">Recon</button>
 
             <button data-tab-item="content" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','content')">Content</button>
-
         </div>
         <div class="tab-content">
 
@@ -309,8 +308,8 @@
                 {{ end }}
             </div>
 
-            <div id="content-tab" data-host="{{ .Params.Name }}" data-tab-item="content" data-tab-group="default" class="tab-item">
-              <h3>Content</h3>
+            <div data-tab-item="content" data-tab-group="default" class="tab-item">
+              <div id="host-content"></div>
             </div>
         </div>
     </div>
@@ -322,5 +321,9 @@
       <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
   {{end}}
 </footer>
+
+
+{{ $js := resources.Get "js/hosts/single.jsx" | js.Build (dict "params" (dict "host" .Params.Name)) }}
+<script src="{{ $js.RelPermalink }}"></script>
 
 {{ partial "footer.html" . }}
