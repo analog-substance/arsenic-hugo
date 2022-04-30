@@ -322,8 +322,12 @@
   {{end}}
 </footer>
 
-
-{{ $js := resources.Get "js/hosts/single.jsx" | js.Build (dict "params" (dict "host" .Params.Name)) }}
+<script>
+  var hostParams = {
+    name: "{{.Params.Name}}"
+  }
+</script>
+{{ $js := resources.Get "js/hosts/single.jsx" | js.Build }}
 <script src="{{ $js.RelPermalink }}"></script>
 
 {{ partial "footer.html" . }}

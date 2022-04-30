@@ -2,7 +2,6 @@ import DataTable from 'react-data-table-component';
 import * as React from 'react'
 import * as ReactDOM from 'react-dom';
 import { ARSENIC_API_URL } from 'js/lib/const';
-import * as params from '@params';
 import { defaultThemes } from 'js/lib/themes';
 
 const customStyles = {
@@ -178,4 +177,4 @@ class HostContent extends React.Component {
 }
 
 const domContainer = document.querySelector('#host-content');
-ReactDOM.render(<HostContent host={params.host}/>, domContainer);
+ReactDOM.render(<HostContent host={hostParams.name}/>, domContainer);
