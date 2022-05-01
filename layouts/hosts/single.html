@@ -177,11 +177,10 @@
 
               {{ .Content }}
 
-              {{$readme := print "content/" .File.Dir "/README.md" }}
-              {{ if and (fileExists $readme)}}
-
-              {{ (print $readme) | readFile | markdownify }}
-
+              {{$readme := print .File.Dir "README.md" }}
+              
+              {{ range (where .Site.RegularPages "File.Path" $readme ) }}
+                {{ .Content }}
               {{ end }}
 
             </div>
