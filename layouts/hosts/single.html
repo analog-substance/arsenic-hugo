@@ -1,5 +1,74 @@
 {{ partial "header.html" . }}
 
+{{ define "partials/display-directory" }}
+  {{ $dir := .dir }}
+  {{ $relDir := .relDir }}
+  {{ $level := .level }}
+
+  {{ $filtered := slice }}
+  {{ range readDir $dir }}
+    {{/*  Things we do not want to show up in this tab  */}}
+    {{ if and (not (in .Name "gnmap")) (not (in .Name "ignore_")) }}
+      {{ $filtered = $filtered | append . }}
+    {{ end }}
+  {{ end }}
+
+  {{ range $filtered }}
+    {{ $reconFile := path.Join $dir .Name }}
+    {{ $reconFileRel := path.Join $relDir .Name }}
+
+    {{/*  Aquatone Start  */}}
+    {{ if and (in .Name "aquatone") }}
+      {{$aquatonePath := path.Join $relDir .Name "aquatone_report.html#/pages/single" }}
+      <div class="expand">
+        <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+            <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+            <span>Aquatone</span>
+        </div>
+        <div class="expand-content" style="display: none">
+          <a href="{{ $aquatonePath }}" target="aquatone-frame">{{ .Name }}</a>
+          <iframe name="aquatone-frame" src="{{ $aquatonePath }}" style="height: 500px; width: 100%"></iframe>
+        </div>
+      </div>
+    {{/*  Aquatone End  */}}
+
+    {{ else if .IsDir }}
+      <div class="expand">
+        <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+          <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+            <span>{{ .Name }}</span>
+        </div>
+        <div class="expand-content" style="display: none;">
+          <div style="margin-left: {{ mul 10 (add $level 1)}}px;">
+            {{ partial "display-directory" (dict "dir" $reconFile "relDir" $reconFileRel "level" (add $level 1)) }}
+          </div>
+        </div>
+      </div>
+    {{ else }}
+      <div class="expand">
+        <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
+          <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
+            <span>
+              {{ .Name }}
+              {{ if or (strings.HasSuffix $reconFile ".html") (strings.HasSuffix $reconFile ".xml") }}
+                <a href="{{ $reconFileRel }}" class="">
+                  <i class="fa fa-lg fa-link" aria-hidden="true"></i>
+                </a>
+              {{ end }}
+            </span>
+        </div>
+        <div class="expand-content" style="display: none;">
+          {{ if and (strings.HasSuffix $reconFile ".xml") (in $reconFile "nmap") }}
+            <iframe name="nmap-frame" src="{{ $reconFileRel }}" style="height: 500px; width: 100%"></iframe>
+          {{ else }}
+            <pre>{{ readFile $reconFile }}</pre>
+          {{ end }}
+        </div>
+      </div>
+    {{ end }}
+  {{ end }}
+{{ end }}
+
 {{ .Content }}
 
 {{ if .Params }}
@@ -243,69 +312,15 @@
             </div>
             {{ end }}
 
-            <div data-tab-item="recon" data-tab-group="default" class="tab-item">
-
-                {{$reconDir := print "content/" .File.Dir "/recon/" }}
-                {{ if and (fileExists $reconDir)}}
+            {{ $reconDir := path.Join "content" .File.Dir "recon" }}
+            {{ $reconDirRel := replace $reconDir "content/" "/" }}
+            {{ if and (fileExists $reconDir)}}
+              <div data-tab-item="recon" data-tab-group="default" class="tab-item">
                 <h3>Recon</h3>
-                  {{ $.Scratch.Set "counter" 0 }}
-                  {{ range $index, $element := (readDir $reconDir) }}
-                    {{ if (in $element.Name "aquatone") }}
-                      {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
-                      {{$aquatonePath := print "/" ( replace $reconDir "content/" "" ) "/" $element.Name  "/aquatone_report.html#/pages/single" }}
-                      {{ if eq ($.Scratch.Get "counter") 1 }}
 
-                      <div class="expand">
-                          <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-                              <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-                              <span>Aquatone</span>
-                          </div>
-                          <div class="expand-content" style="display: none">
-                      {{ end }}
-                        <a href="{{ $aquatonePath }}" target="aquatone-frame">{{ $element.Name }}</a>
-                    {{ end }}
-                  {{ end }}
-                  {{ $.Scratch.Set "counter" 0 }}
-                  {{ range $index, $element := (readDir $reconDir) }}
-                    {{ if (in $element.Name "aquatone") }}
-                      {{ $.Scratch.Set "counter" (add ($.Scratch.Get "counter") 1) }}
-                      {{$aquatonePath := print "/" ( replace $reconDir "content/" "" ) "/" $element.Name  "/aquatone_report.html#/pages/single" }}
-                      {{ if eq ($.Scratch.Get "counter") 1 }}
-                        <iframe name="aquatone-frame" src="{{ $aquatonePath }}" style="height: 500px; width: 100%"></iframe>
-                      </div>
-                  </div>
-                      {{ end }}
-                    {{ end }}
-                  {{ end }}
-                  {{ range $index, $element := (readDir $reconDir) }}
-                    {{ if and (not (in $element.Name ".gnmap")) (not (in $element.Name "aquatone")) (not (in $element.Name "ignore_"))  }}
-                    {{$reconFile := print $reconDir $element.Name  }}
-
-                    <div class="expand">
-                        <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
-                            <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
-                            <span>
-                              {{ $element.Name }}
-                            {{ if or (in $reconFile ".html") (in $reconFile ".xml") }}
-                            <a href="{{ replace $reconFile "content/" "/" }}" class="">
-                              <i class="fa fa-lg fa-link" aria-hidden="true"></i>
-                            </a>
-                            {{end}}
-
-                            </span>
-                          </div>
-                          <div class="expand-content" style="display: none;">
-                        {{ if and (in $reconFile ".xml") (in $reconFile "nmap") }}
-                        <iframe name="nmap-frame" src="{{ replace $reconFile "content/" "/" }}" style="height: 500px; width: 100%"></iframe>
-                        {{ else }}
-                        <pre>{{readFile $reconFile }}</pre>
-                        {{end}}
-                    </div>
-                </div>
-                    {{ end }}
-                  {{ end }}
-                {{ end }}
-            </div>
+                {{ partial "display-directory" (dict "dir" $reconDir "relDir" $reconDirRel "level" 0) }}
+              </div>
+            {{ end }}
 
             <div data-tab-item="content" data-tab-group="default" class="tab-item">
               <div id="host-content"></div>
@@ -315,11 +330,6 @@
 </div>
 
 {{ end }}
-<footer class="footline">
-  {{with .Params.LastModifierDisplayName}}
-      <i class='fas fa-user'></i> <a href="mailto:{{ $.Params.LastModifierEmail }}">{{ . }}</a> {{with $.Date}} <i class='fas fa-calendar'></i> {{ .Format "02/01/2006" }}{{end}}
-  {{end}}
-</footer>
 
 <script>
   var hostParams = {
