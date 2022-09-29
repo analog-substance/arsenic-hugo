@@ -49,7 +49,7 @@
         <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';});});">
           <i style="font-size:x-small;" class="fas fa-chevron-right"></i>
             <span>
-              {{ .Name }}
+              <code>{{ replace $reconFileRel "/" "" 1}}</code>
               {{ if or (strings.HasSuffix $reconFile ".html") (strings.HasSuffix $reconFile ".xml") }}
                 <a href="{{ $reconFileRel }}" class="">
                   <i class="fa fa-lg fa-link" aria-hidden="true"></i>
@@ -216,6 +216,7 @@
             <button data-tab-item="recon" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','recon')">Recon</button>
 
             <button data-tab-item="content" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','content')">Content</button>
+            <button data-tab-item="helpers" data-tab-group="default" class="tab-nav-button btn" onclick="switchTab('default','helpers')">Helpers</button>
         </div>
         <div class="tab-content">
 
@@ -324,6 +325,44 @@
 
             <div data-tab-item="content" data-tab-group="default" class="tab-item">
               <div id="host-content"></div>
+            </div>
+
+            <div data-tab-item="helpers" data-tab-group="default" class="tab-item">
+              {{ $hostDir := .File.Dir }}
+
+              <p>
+                <h4>Host commands</h4>
+                {{ if  .Params.IPAddresses  }}
+                  {{ range .Params.IPAddresses }}
+                    <div><code>host {{ . }} | tee {{ $hostDir }}recon/host-{{ . }}.txt</code></div>
+                  {{ end }}
+                {{ end }}
+              </p>
+
+              {{ if  .Params.TCPPorts  }}
+
+              {{ $ports := delimit .Params.TCPPorts ","  }}
+              <p>
+                <h4>Run quick nmap rescan</h4>
+                {{ if  .Params.IPAddresses  }}
+                  {{ range .Params.IPAddresses }}
+                    <div><code>sudo nmap --stylesheet /static/nmap.xsl -A -oA {{ $hostDir }}recon/nmap-manual -Pn -p {{ $ports }} {{ . }}</code></div>
+                  {{ end }}
+                {{ end }}
+              </p>
+
+              <p>
+                <h4>Get Cerificate Information</h4>
+                {{ if  .Params.IPAddresses  }}
+                  {{ $ips := .Params.IPAddresses }}
+                  {{ range $port := .Params.TCPPorts }}
+                    {{ range $ips }}
+                      <div><code>openssl s_client -showcerts -connect {{ . }}:{{ $port }} &lt; /dev/null | tee {{ $hostDir }}recon/openssl-{{ . }}-{{ $port }}.txt</code></div>
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              </p>
+              {{ end }}
             </div>
         </div>
     </div>
