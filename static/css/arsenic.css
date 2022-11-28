@@ -258,6 +258,16 @@ p.page-break {
   }
 }
 
+.btn-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.btn-toolbar .input-group {
+  width: auto;
+}
 
 .host-info {
   display: inline-block;
@@ -303,15 +313,8 @@ ul.compact:hover {
   max-height: none;
 }
 
-.btn-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+#review-btn {
   margin-bottom: 20px;
-}
-
-.btn-toolbar .input-group {
-  width: auto;
 }
 
 .lead-table .btn-group {

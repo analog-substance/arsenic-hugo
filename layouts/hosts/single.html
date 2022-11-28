@@ -75,6 +75,8 @@
 
 {{ $ip := print (replace (replace .File.Dir "hosts/" "") "/" "") }}
 
+<div id="review-btn"></div>
+
 <div class="host-info-container as-container d-flex">
   <div class="host-info p-2 flex-fill">
     <strong>Reviewed By: {{ .Params.ReviewedBy }}</strong>

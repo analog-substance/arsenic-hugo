@@ -3,6 +3,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom';
 import { ARSENIC_API_URL } from 'js/lib/const';
 import { defaultThemes } from 'js/lib/themes';
+import ReactiveButton from 'reactive-button';
 
 const customStyles = {
 	header: {
@@ -166,5 +167,38 @@ class HostContent extends React.Component {
 	}
 }
 
+class ReviewButton extends React.Component {
+	constructor(props) {
+		super(props)
+
+		this.host = props.host
+		this.url = `${ARSENIC_API_URL}/host/review`
+	}
+
+	review() {
+		$.post(this.url, JSON.stringify({
+			host: this.host
+		}), (data) => {
+			console.log(data)
+		}).fail(() => {
+			console.log("Error reviewing host")
+		})
+	}
+
+	render() {
+		return (
+			<ReactiveButton
+				idleText="Review"
+				onClick={() => {
+					this.review()
+				}}
+			/>
+		);
+	}
+}
+
 const domContainer = document.querySelector('#host-content');
 ReactDOM.render(<HostContent host={hostParams.name}/>, domContainer);
+
+const container = document.querySelector('#review-btn')
+ReactDOM.render(<ReviewButton host={hostParams.name}/>, container)
