@@ -75,11 +75,7 @@
 
 {{ $ip := print (replace (replace .File.Dir "hosts/" "") "/" "") }}
 
-<div class="btn-toolbar" role="toolbar">
-  <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default" onclick="review('{{ .Params.Name }}')">Review</button>
-  </div>
-</div>
+<div id="review-btn"></div>
 
 <div class="host-info-container as-container d-flex">
   <div class="host-info p-2 flex-fill">
@@ -383,25 +379,5 @@
 </script>
 {{ $js := resources.Get "js/hosts/single.jsx" | js.Build }}
 <script src="{{ $js.RelPermalink }}"></script>
-
-<script>
-  function review(host) {
-    var http = new XMLHttpRequest();
-    var url = 'http://localhost:7433/api/host/review';
-    http.open('POST', url, true);
-
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/json');
-
-    http.onreadystatechange = function() {
-        if(http.readyState == 4 && http.status == 200) {
-            console.log(http.responseText);
-        }
-    }
-    http.send(JSON.stringify({
-      host: host
-    }));
-  }
-</script>
 
 {{ partial "footer.html" . }}
