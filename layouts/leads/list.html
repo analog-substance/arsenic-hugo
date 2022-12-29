@@ -4,7 +4,7 @@
   {{ .Content }}
 {{end}}
 
-{{ $allLeads := (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.leadSections) }}
+{{ $allLeads := sort (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.leadSections) ".Params.cvss.score" "desc" }}
 {{ $usedIDs := slice }}
 
 <div>
