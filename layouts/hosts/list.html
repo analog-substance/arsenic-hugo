@@ -46,6 +46,15 @@
   {{ end }}
 </table>
 
+<p>
+<h4>Run quick nmap rescan</h4>
+<pre><code>
+echo '#! /bin/bash' >> bin/nmap-manual-all.sh
+arsenic hosts --json | jq -r  '.[] | ["sudo nmap --stylesheet /static/nmap.xsl -A -oA ", ([.Dir, "/recon/nmap-manual"]|join("")), "-Pn -p", (.Metadata.TCPPorts | join(",")), .Metadata.IPAddresses[0]] | join(" ")' >> bin/nmap-manual-all.sh
+chmod +x bin/nmap-manual-all.sh
+</code></pre>
+</p>
+
 
 
   <footer class=" footline" >
