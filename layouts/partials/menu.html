@@ -1,162 +1,185 @@
 <nav id="sidebar" class="{{if $.Site.Params.showVisitedLinks }}showVisitedLinks{{end}}">
 
-{{ $currentNode := . }}
-{{ $showvisitedlinks := .Site.Params.showVisitedLinks }}
+  {{ $currentNode := . }}
+  {{ $showvisitedlinks := .Site.Params.showVisitedLinks }}
   <div id="header-wrapper">
     <div id="header">
       {{ partial "logo.html" . }}
     </div>
     {{if not .Site.Params.disableSearch}}
-        {{ partial "search.html" . }}
+    {{ partial "search.html" . }}
     {{end}}
   </div>
   {{if not .Site.Params.disableLandingPageButton }}
-    <section id="homelinks">
-      <ul>
-        <li>
-            <a class="padding" href='{{ (cond (and (ne .Site.Params.landingPageURL nil) (.Site.IsMultiLingual)) .Site.Params.landingPageURL "/") }}'>{{ safeHTML (cond (ne .Site.Params.landingPageName nil) .Site.Params.landingPageName "<i class='fas fa-home'></i> Home") }}</a>
-        </li>
-      </ul>
-    </section>
+  <section id="homelinks">
+    <ul>
+      <li>
+        <a class="padding"
+          href='{{ (cond (and (ne .Site.Params.landingPageURL nil) (.Site.IsMultiLingual)) .Site.Params.landingPageURL "/") }}'>{{
+          safeHTML (cond (ne .Site.Params.landingPageName nil) .Site.Params.landingPageName "<i class='fas fa-home'></i>
+          Home") }}</a>
+      </li>
+    </ul>
+  </section>
   {{end}}
 
-  {{ $filekey := lower (print .File.UniqueID .File.Path .Name) }}
+  {{ $filekey := "" }}
+  {{ with $currentNode }}
+  {{ $uniqPath := "" }}
+  {{ with .File }}
+  {{ $path := "" }}
+  {{ with .File }}
+  {{ $path = .Path }}
+  {{ else }}
+  {{ $path = .Path }}
+  {{ end }}
+  {{ $uniqPath = (print .UniqueID $path ) }}
+  {{ end }}
+  {{ $filekey = (print $uniqPath .Name) }}
+  {{ end }}
 
   <div class="highlightable">
     <ul class="topics">
-      <li data-nav-id="/sections/" title="Report" class="dd-item {{if eq $filekey "sections"}}active{{end}}">
+      <li data-nav-id="/sections/" title="Report" class="dd-item {{if eq $filekey " sections"}}active{{end}}">
         <a href="/sections/">
-            Report
+          Report
         </a>
         {{ partial "report-toc.html" . }}
       </li>
-      <li data-nav-id="https://www.first.org/cvss/calculator/3.0" title="https://www.first.org/cvss/calculator/3.0" class="dd-item">
+      <li data-nav-id="https://www.first.org/cvss/calculator/3.0" title="https://www.first.org/cvss/calculator/3.0"
+        class="dd-item">
         <a href="https://www.first.org/cvss/calculator/3.0/">
-            CVSS Calculator
+          CVSS Calculator
         </a>
       </li>
-      <li data-nav-id="https://cwe.mitre.org/data/index.html" title="https://cwe.mitre.org/data/index.html" class="dd-item">
+      <li data-nav-id="https://cwe.mitre.org/data/index.html" title="https://cwe.mitre.org/data/index.html"
+        class="dd-item">
         <a href="https://cwe.mitre.org/data/index.html">
-            CWE
+          CWE
         </a>
       </li>
-      <li data-nav-id="/notes/" title="notes" class="dd-item {{if eq $filekey "notes"}}active{{end}}">
+      <li data-nav-id="/notes/" title="notes" class="dd-item {{if eq $filekey " notes"}}active{{end}}">
         <a href="/notes/">
-            Notes
+          Notes
         </a>
       </li>
-      <li data-nav-id="/pipeline/" title="pipeline" class="dd-item {{if eq $filekey "pipelines"}}active{{end}}">
+      <li data-nav-id="/pipeline/" title="pipeline" class="dd-item {{if eq $filekey " pipelines"}}active{{end}}">
         <a href="/pipeline/">
-            Pipeline
+          Pipeline
         </a>
       </li>
-      <li data-nav-id="/flags/" title="flags" class="dd-item {{if eq $filekey "flags"}}active{{end}}">
+      <li data-nav-id="/flags/" title="flags" class="dd-item {{if eq $filekey " flags"}}active{{end}}">
         <a href="/flags/">
-            Flags
+          Flags
         </a>
       </li>
-      <li data-nav-id="/userflags/" title="userflags" class="dd-item {{if eq $filekey "userflags"}}active{{end}}">
+      <li data-nav-id="/userflags/" title="userflags" class="dd-item {{if eq $filekey " userflags"}}active{{end}}">
         <a href="/userflags/">
           UserFlags
         </a>
       </li>
-      <li data-nav-id="/tcpports/" title="tcpports" class="dd-item {{if eq $filekey "tcpports"}}active{{end}}">
+      <li data-nav-id="/tcpports/" title="tcpports" class="dd-item {{if eq $filekey " tcpports"}}active{{end}}">
         <a href="/tcpports/">
-            TCP Ports
+          TCP Ports
         </a>
       </li>
-      <li data-nav-id="/udpports/" title="udpports" class="dd-item {{if eq $filekey "udpports"}}active{{end}}">
+      <li data-nav-id="/udpports/" title="udpports" class="dd-item {{if eq $filekey " udpports"}}active{{end}}">
         <a href="/udpports/">
-            UDP Ports
+          UDP Ports
         </a>
       </li>
 
-      <li data-nav-id="/rootdomains/" title="rootdomains" class="dd-item {{if eq $filekey "rootdomains"}}active{{end}}">
+      <li data-nav-id="/rootdomains/" title="rootdomains" class="dd-item {{if eq $filekey "
+        rootdomains"}}active{{end}}">
         <a href="/rootdomains/">
-            Root Domains
+          Root Domains
         </a>
       </li>
 
-      <li data-nav-id="/hostnames/" title="hostnames" class="dd-item {{if eq $filekey "hostnames"}}active{{end}}">
+      <li data-nav-id="/hostnames/" title="hostnames" class="dd-item {{if eq $filekey " hostnames"}}active{{end}}">
         <a href="/hostnames/">
-            Hostnames
+          Hostnames
         </a>
       </li>
 
-      <li data-nav-id="/leads/" title="leads" class="dd-item {{if in $filekey "leads"}}active{{end}}">
+      <li data-nav-id="/leads/" title="leads" class="dd-item {{if in $filekey " leads"}}active{{end}}">
         <a href="/leads/">
           Leads
         </a>
       </li>
 
       {{if eq .Site.Params.ordersectionsby "title"}}
-        {{range .Site.Home.Sections.ByTitle}}
-        {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
-        {{end}}
+      {{range .Site.Home.Sections.ByTitle}}
+      {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
+      {{end}}
       {{else}}
-        {{range .Site.Home.Sections.ByWeight}}
-        {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
-        {{end}}
+      {{range .Site.Home.Sections.ByWeight}}
+      {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks}}
+      {{end}}
       {{end}}
 
     </ul>
 
     {{ $disableShortcutsTitle := .Site.Params.DisableShortcutsTitle}}
     {{with .Site.Menus.shortcuts}}
-      <section id="shortcuts">
-        <h3>{{ if not $disableShortcutsTitle}}{{ T "Shortcuts-Title"}}{{ end }}</h3>
-        <ul>
-          {{ range sort . "Weight"}}
-              <li>
-                  {{.Pre}}<a class="padding" href="{{.URL | absLangURL }}">{{safeHTML .Name}}</a>{{.Post}}
-              </li>
-          {{end}}
-        </ul>
-      </section>
+    <section id="shortcuts">
+      <h3>{{ if not $disableShortcutsTitle}}{{ T "Shortcuts-Title"}}{{ end }}</h3>
+      <ul>
+        {{ range sort . "Weight"}}
+        <li>
+          {{.Pre}}<a class="padding" href="{{.URL | absLangURL }}">{{safeHTML .Name}}</a>{{.Post}}
+        </li>
+        {{end}}
+      </ul>
+    </section>
     {{end}}
 
     {{ if or .Site.IsMultiLingual $showvisitedlinks }}
     <section id="prefooter">
-      <hr/>
+      <hr />
       <ul>
-      {{ if and .Site.IsMultiLingual (not .Site.Params.DisableLanguageSwitchingButton)}}
+        {{ if and .Site.IsMultiLingual (not .Site.Params.DisableLanguageSwitchingButton)}}
         <li>
           <a class="padding">
             <i class="fas fa-language fa-fw"></i>
-          <div class="select-style">
-            <select id="select-language" onchange="location = this.value;">
-          {{ $siteLanguages := .Site.Languages}}
-          {{ $pageLang := .Page.Lang}}
-          {{ range .Page.AllTranslations }}
-              {{ $translation := .}}
-              {{ range $siteLanguages }}
-                  {{ if eq $translation.Lang .Lang }}
-                    {{ $selected := false }}
-                    {{ if eq $pageLang .Lang}}
-                      <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}" selected>{{ .LanguageName }}</option>
-                    {{ else }}
-                      <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}">{{ .LanguageName }}</option>
-                    {{ end }}
-                  {{ end }}
-              {{ end }}
-          {{ end }}
-        </select>
-        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
-          <g>
-            <g id="arrow-drop-down">
-              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
-            </g>
-          </g>
-        </svg>
-        </div>
-        </a>
+            <div class="select-style">
+              <select id="select-language" onchange="location = this.value;">
+                {{ $siteLanguages := .Site.Languages}}
+                {{ $pageLang := .Page.Lang}}
+                {{ range .Page.AllTranslations }}
+                {{ $translation := .}}
+                {{ range $siteLanguages }}
+                {{ if eq $translation.Lang .Lang }}
+                {{ $selected := false }}
+                {{ if eq $pageLang .Lang}}
+                <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}" selected>{{ .LanguageName
+                  }}</option>
+                {{ else }}
+                <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}">{{ .LanguageName }}
+                </option>
+                {{ end }}
+                {{ end }}
+                {{ end }}
+                {{ end }}
+              </select>
+              <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="255px" height="255px"
+                viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+                <g>
+                  <g id="arrow-drop-down">
+                    <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </a>
         </li>
-      {{end}}
+        {{end}}
 
-      {{ if $showvisitedlinks}}
-        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> {{T "Clear-History"}}</a></li>
-      {{ end }}
+        {{ if $showvisitedlinks}}
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> {{T
+            "Clear-History"}}</a></li>
+        {{ end }}
       </ul>
     </section>
     {{ end }}
@@ -171,65 +194,90 @@
 {{ $showvisitedlinks := .showvisitedlinks }}
 {{ $currentNode := .currentnode }}
 {{ $currentFileUniqueID := "" }}
-{{ with $currentNode }}{{ $currentFileUniqueID = (print .File.UniqueID .File.Path .Name) }}{{ end }}
- {{with .sect}}
-  {{if or (strings.HasPrefix .Path "findings") (strings.HasPrefix .Path "hosts")}}
-  {{if and .IsSection (or (not .Params.hidden) $.showhidden)}}
-    {{safeHTML .Params.head}}
+{{ with $currentNode }}
+{{ $uniqPath := "" }}
+{{ with .File }}
+{{ $path := "" }}
+{{ with .File }}
+{{ $path = .Path }}
+{{ else }}
+{{ $path = .Path }}
+{{ end }}
+{{ $uniqPath = (print .UniqueID $path ) }}
+{{ end }}
+{{ $currentFileUniqueID = (print $uniqPath .Name) }}
+{{ end }}
+{{with .sect}}
+{{if or (strings.HasPrefix .Path "findings") (strings.HasPrefix .Path "hosts")}}
+{{if and .IsSection (or (not .Params.hidden) $.showhidden)}}
+{{safeHTML .Params.head}}
+{{ $path := "" }}
+{{ with .File }}
+{{ $path = (print .UniqueID .Path ) }}
+{{ else }}
+{{ $path = (print .Path ) }}
+{{ end }}
 
-    <li data-nav-id="{{.RelPermalink}}" title="{{or .Params.Name .Params.menuTitle .LinkTitle .Title}}" class="dd-item
+{{ $targetPath := (print $path .Name) }}
+
+<li data-nav-id="{{.RelPermalink}}" title="{{or .Params.Name .Params.menuTitle .LinkTitle .Title}}" class="dd-item
         {{if .IsAncestor $currentNode }}parent{{end}}
-        {{if eq (print .File.UniqueID .File.Path .Name) $currentFileUniqueID}}active{{end}}
+        {{if eq $targetPath $currentFileUniqueID}}active{{end}}
         {{if .Params.alwaysopen}}parent{{end}}
         ">
-      <a href="{{.RelPermalink}}">
-          {{safeHTML .Params.Pre}}{{.Params.cvss.score}}{{or .Params.Name .Params.menuTitle .LinkTitle .Title }}{{safeHTML .Params.Post}}
-          {{ if $showvisitedlinks}}
-            <i class="fas fa-check read-icon"></i>
-          {{ end }}
-      </a>
-      {{ $numberOfPages := (add (len ( where .Pages "Params.hidden" "ne" true )) (len ( where .Sections "Params.hidden" "ne" true ))) }}
-      {{ if ne $numberOfPages 0 }}
-        <ul>
-          {{ $currentNode.Scratch.Set "pages" .Pages }}
-          {{ if .Sections}}
-            {{ $currentNode.Scratch.Set "pages" (.Pages | union .Sections) }}
-          {{end}}
-          {{ $pages := ($currentNode.Scratch.Get "pages") }}
+  <a href="{{.RelPermalink}}">
+    {{safeHTML .Params.Pre}}{{.Params.cvss.score}}{{or .Params.Name .Params.menuTitle .LinkTitle .Title }}{{safeHTML
+    .Params.Post}}
+    {{ if $showvisitedlinks}}
+    <i class="fas fa-check read-icon"></i>
+    {{ end }}
+  </a>
+  {{ $numberOfPages := (add (len ( where .Pages "Params.hidden" "ne" true )) (len ( where .Sections "Params.hidden" "ne"
+  true ))) }}
+  {{ if ne $numberOfPages 0 }}
+  <ul>
+    {{ $currentNode.Scratch.Set "pages" .Pages }}
+    {{ if .Sections}}
+    {{ $currentNode.Scratch.Set "pages" (.Pages | union .Sections) }}
+    {{end}}
+    {{ $pages := ($currentNode.Scratch.Get "pages") }}
 
-        {{if strings.HasPrefix .Path "findings"}}
-        {{ $findings := (sort (sort (where (where (.Site.RegularPages.ByParam "sec") "Section" "in" .Site.Params.findingSections) ".Params.cvss.score" "!=" nil) ".Title" "asc") ".Params.cvss.score" "desc") }}
-          {{ range $findings }}
-              {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks }}
-          {{ end }}
-        {{else if eq .Site.Params.ordersectionsby "title"}}
-          {{ range $pages.ByTitle }}
-            {{ if or (not strings.HasSuffix .Path "metadata.md") (and .Params.hidden (not $.showhidden)) }}
-            {{else}}
-            {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks }}
-            {{end}}
-          {{ end }}
-        {{else}}
-          {{ range $pages.ByWeight }}
-            {{ if or (not (strings.HasSuffix .Path "metadata.md")) (and .Params.hidden (not $.showhidden)) }}
-            {{else}}
-            {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks }}
-            {{end}}
-          {{ end }}
-        {{end}}
-        </ul>
-      {{ end }}
-    </li>
-  {{else}}
-    {{ if not .Params.Hidden }}
-      <li data-nav-id="{{.RelPermalink}}" title="{{.Title}}" class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) $currentFileUniqueID}}active{{end}}">
-        <a href="{{ .RelPermalink}}">
-        {{safeHTML .Params.Pre}}{{.Params.cvss.score}} {{or .Params.Name .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
-        {{ if $showvisitedlinks}}<i class="fas fa-check read-icon"></i>{{end}}
-        </a>
-    </li>
-     {{ end }}
-  {{end}}
-  {{end}}
- {{ end }}
+    {{if strings.HasPrefix .Path "findings"}}
+    {{ $findings := (sort (sort (where (where (.Site.RegularPages.ByParam "sec") "Section" "in"
+    .Site.Params.findingSections) ".Params.cvss.score" "!=" nil) ".Title" "asc") ".Params.cvss.score" "desc") }}
+    {{ range $findings }}
+    {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks }}
+    {{ end }}
+    {{else if eq .Site.Params.ordersectionsby "title"}}
+    {{ range $pages.ByTitle }}
+    {{ if or (not strings.HasSuffix .Path "metadata.md") (and .Params.hidden (not $.showhidden)) }}
+    {{else}}
+    {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks }}
+    {{end}}
+    {{ end }}
+    {{else}}
+    {{ range $pages.ByWeight }}
+    {{ if or (not (strings.HasSuffix .Path "metadata.md")) (and .Params.hidden (not $.showhidden)) }}
+    {{else}}
+    {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks }}
+    {{end}}
+    {{ end }}
+    {{end}}
+  </ul>
+  {{ end }}
+</li>
+{{else}}
+{{ if not .Params.Hidden }}
+<li data-nav-id="{{.RelPermalink}}" title="{{.Title}}"
+  class="dd-item {{if eq (print .File.UniqueID .File.Path .Name) $currentFileUniqueID}}active{{end}}">
+  <a href="{{ .RelPermalink}}">
+    {{safeHTML .Params.Pre}}{{.Params.cvss.score}} {{or .Params.Name .Params.menuTitle .LinkTitle .Title}}{{safeHTML
+    .Params.Post}}
+    {{ if $showvisitedlinks}}<i class="fas fa-check read-icon"></i>{{end}}
+  </a>
+</li>
+{{ end }}
+{{end}}
+{{end}}
+{{ end }}
 {{ end }}
