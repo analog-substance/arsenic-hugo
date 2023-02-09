@@ -38,47 +38,27 @@ const customStyles = {
 	},
 };
 
-const UrlCell = ({ row }) => {
-	let isRedirect = row.Redirect && row.Redirect != ""
-	let columns = [
-		{
-			cell: row => (
-				<div>
-					<div>{row.Url}</div>
-					{isRedirect &&
-						<div>
-							{row.Redirect}
-						</div>
-					}
-				</div>
-			)
-		},
-		{
-			cell: () => <i className="fa-solid fa-arrow-rotate-right fa-rotate-by rotate-160"></i>,
-			omit: !isRedirect,
-			right: true
-		},
-	];
-	return (
-		<DataTable 
-			columns={columns}
-			data={[row]}
-			noHeader
-			noTableHead
-		/>
-	)
-};
-
 class ContentTable extends React.Component {
 	constructor(props) {
 		super(props);
+
+		this.group = props.data
 
 		this.columns = [
 			{
 				name: 'URL',
 				selector: row => row.Url,
 				sortable: true,
-				cell: row => <UrlCell row={row}/>
+				wrap: true,
+				grow: 3,
+			},
+			{
+				name: 'Redirect',
+				selector: row => row.Redirect,
+				sortable: true,
+				omit: !this.group.group.startsWith("3"),
+				wrap: true,
+				grow: 3,
 			},
 			{
 				name: 'Content Type',
@@ -88,18 +68,16 @@ class ContentTable extends React.Component {
 			{
 				name: 'Content Length',
 				selector: row => row.ContentLength,
-				sortable: true
+				sortable: true,
 			},
 		];
-
-		this.data = props.data
 	}
 
 	render() {
 		return (
 			<DataTable
 				columns={this.columns}
-				data={this.data}
+				data={this.group.data}
 				customStyles={customStyles}
 				pagination 
 			/>
@@ -107,7 +85,7 @@ class ContentTable extends React.Component {
 	}
 }
 
-const ExpandedGroupComponent = ({ data: group }) => <ContentTable data={group.data} />;
+const ExpandedGroupComponent = ({ data: group }) => <ContentTable data={group} />;
 
 class HostContent extends React.Component {
 	constructor(props) {
