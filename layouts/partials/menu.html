@@ -16,8 +16,8 @@
       <li>
         <a class="padding"
           href='{{ (cond (and (ne .Site.Params.landingPageURL nil) (.Site.IsMultiLingual)) .Site.Params.landingPageURL "/") }}'>{{
-          safeHTML (cond (ne .Site.Params.landingPageName nil) .Site.Params.landingPageName "<i class='fas fa-home'></i>
-          Home") }}</a>
+          safeHTML (cond (ne .Site.Params.landingPageName nil) .Site.Params.landingPageName "<i class='fas fa-home'></i> Home") 
+        }}</a>
       </li>
     </ul>
   </section>
@@ -89,8 +89,7 @@
         </a>
       </li>
 
-      <li data-nav-id="/rootdomains/" title="rootdomains" class="dd-item {{if eq $filekey "
-        rootdomains"}}active{{end}}">
+      <li data-nav-id="/rootdomains/" title="rootdomains" class="dd-item {{if eq $filekey " rootdomains"}}active{{end}}">
         <a href="/rootdomains/">
           Root Domains
         </a>
